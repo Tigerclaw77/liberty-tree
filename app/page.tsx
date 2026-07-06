@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { ButtonLink } from "@/components/ButtonLink";
 import { SectionHeading } from "@/components/SectionHeading";
+import { TrustIcon } from "@/components/TrustIcon";
 
 export const metadata: Metadata = {
   title: "Boutique Compliance Evidence Services",
@@ -31,6 +32,29 @@ const deliveryItems = [
   },
 ];
 
+const trustPillars = [
+  {
+    icon: "documentation",
+    title: "DOCUMENTATION FIRST",
+    body: "We organize the documentation auditors and customers request.",
+  },
+  {
+    icon: "source",
+    title: "SOURCE-INDEXED",
+    body: "Every conclusion is traceable to supporting documentation.",
+  },
+  {
+    icon: "review",
+    title: "HUMAN REVIEWED",
+    body: "Each deliverable receives expert review before delivery.",
+  },
+  {
+    icon: "confidential",
+    title: "CONFIDENTIAL",
+    body: "Projects are handled discreetly and with strict confidentiality.",
+  },
+] as const;
+
 const processSteps = [
   {
     title: "Scope the request",
@@ -55,16 +79,16 @@ export default function Home() {
     <>
       <section className="site-shell home-hero grid gap-12 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div>
-          <p className="eyebrow">Boutique compliance evidence services</p>
+          <p className="eyebrow">Evidence-first compliance documentation</p>
           <h1 className="mt-5 max-w-3xl font-serif text-5xl font-normal leading-tight text-navy sm:text-6xl">
             Compliance evidence. Organized. Defensible. Delivered.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted">
             Liberty Tree Compliance helps manufacturers assemble audit-ready
             documentation for emerging regulatory requirements, beginning with
-            PFAS evidence packages. We streamline document collection, evidence
-            organization, and gap identification so your team can respond with
-            confidence.
+            PFAS evidence packages. We structure document collection, evidence
+            organization, and gap identification so your team can respond from a
+            clear record.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/contact">Request Consultation</ButtonLink>
@@ -82,6 +106,18 @@ export default function Home() {
             priority
             className="h-auto w-full"
           />
+        </div>
+      </section>
+
+      <section className="trust-band">
+        <div className="site-shell grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {trustPillars.map((pillar) => (
+            <article className="trust-card" key={pillar.title}>
+              <TrustIcon name={pillar.icon} />
+              <h2>{pillar.title}</h2>
+              <p>{pillar.body}</p>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -148,10 +184,10 @@ export default function Home() {
           <div className="quiet-card">
             <h3>Built for careful review</h3>
             <p>
-              Each packet is designed to help your internal stakeholders, counsel,
-              or compliance leadership evaluate the available record. Liberty
-              Tree does not certify compliance, provide legal advice, or
-              guarantee regulatory outcomes.
+              Each packet is designed to help your compliance team, counsel, and
+              operations reviewers evaluate the available record. Liberty Tree
+              does not certify compliance, provide legal advice, or guarantee
+              regulatory outcomes.
             </p>
           </div>
         </div>
@@ -204,8 +240,8 @@ export default function Home() {
             eyebrow="Next step"
             title="Prepare the record before the request becomes urgent."
           >
-            Start with a focused consultation about your products, documentation
-            sources, and current PFAS evidence needs.
+            Start with a focused review of your products, documentation sources,
+            and current PFAS evidence needs.
           </SectionHeading>
           <div className="shrink-0">
             <ButtonLink href="/contact">Request Consultation</ButtonLink>

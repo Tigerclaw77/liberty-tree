@@ -26,7 +26,7 @@ const config: Config = {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        soft: "0 24px 80px rgba(15, 39, 66, 0.08)",
+        soft: "0 18px 56px rgba(23, 55, 94, 0.065)",
       },
     },
   },

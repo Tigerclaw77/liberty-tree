@@ -184,7 +184,7 @@ textarea {
 
   .button-primary,
   .button-secondary {
-    @apply inline-flex min-h-12 items-center justify-center border px-6 text-sm font-semibold transition-all duration-200;
+    @apply inline-flex min-h-12 items-center justify-center border px-6 text-[0.84rem] font-semibold leading-none transition-all duration-200;
   }
 
   .button-primary {
@@ -202,7 +202,7 @@ textarea {
   }
 
   .quiet-card {
-    @apply relative border bg-white p-6 shadow-[0_18px_48px_rgba(23,55,94,0.055)] transition-transform duration-200;
+    @apply relative border bg-white p-6 shadow-[0_14px_38px_rgba(23,55,94,0.045)] transition-transform duration-200;
     border-color: rgba(217, 198, 163, 0.82);
   }
 
@@ -216,7 +216,44 @@ textarea {
   }
 
   .quiet-card:hover {
-    @apply -translate-y-0.5;
+    @apply -translate-y-px;
+  }
+
+  .trust-band {
+    @apply border-y bg-white py-8 sm:py-10;
+    border-color: rgba(217, 198, 163, 0.58);
+  }
+
+  .trust-card {
+    @apply relative min-h-48 border bg-bone p-6 transition-colors duration-200;
+    border-color: rgba(217, 198, 163, 0.72);
+  }
+
+  .trust-card::before {
+    @apply absolute left-6 right-6 top-0 h-px content-[''];
+    background: linear-gradient(
+      90deg,
+      rgba(23, 55, 94, 0.22),
+      rgba(217, 198, 163, 0.46),
+      transparent
+    );
+  }
+
+  .trust-card:hover {
+    @apply bg-white;
+    border-color: rgba(138, 111, 67, 0.38);
+  }
+
+  .trust-card h2 {
+    @apply mt-5 text-sm font-semibold text-navy;
+  }
+
+  .trust-card p {
+    @apply mt-3 text-sm leading-7 text-muted;
+  }
+
+  .trust-icon {
+    @apply h-10 w-10 text-brass;
   }
 
   .quiet-card h3 {

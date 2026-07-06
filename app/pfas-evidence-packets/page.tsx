@@ -39,7 +39,7 @@ export default function PfasEvidencePacketsPage() {
             Liberty Tree assembles fixed-scope evidence packets for
             manufacturers that need a clearer, traceable view of available PFAS
             documentation before responding to customers, auditors, counsel, or
-            internal leadership.
+            internal review teams.
           </p>
         </div>
       </section>

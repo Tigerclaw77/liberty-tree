@@ -35,8 +35,8 @@ export default function AboutPage() {
             <p>
               Compliance documentation is often evaluated under pressure. A
               customer asks for support, an audit window approaches, or internal
-              leadership needs a clear view of the evidence. Liberty Tree brings
-              order to that moment by turning scattered materials into structured
+              teams need a clear view of the evidence. Liberty Tree brings order
+              to that moment by turning scattered materials into structured
               records.
             </p>
             <p>
@@ -55,8 +55,7 @@ export default function AboutPage() {
             <p>
               Liberty Tree does not certify compliance, provide legal advice, or
               guarantee regulatory outcomes. The value is in helping teams create
-              a better evidence record for the professionals and stakeholders who
-              need to evaluate it.
+              a better evidence record for the reviewers who need to evaluate it.
             </p>
           </div>
 
@@ -77,10 +76,10 @@ export default function AboutPage() {
         <div className="site-shell flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
             eyebrow="Engagement model"
-            title="Focused projects for teams that need clarity in the record."
+            title="Focused projects for teams that need a clearer evidence record."
           >
-            Begin with a consultation about the request, the available evidence,
-            and the packet your team needs to prepare.
+            Begin with a review of the request, the available evidence, and the
+            packet your team needs to prepare.
           </SectionHeading>
           <div className="shrink-0">
             <ButtonLink href="/contact">Request Consultation</ButtonLink>

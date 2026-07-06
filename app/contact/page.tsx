@@ -27,7 +27,7 @@ export default function ContactPage() {
           <p>
             Share the compliance evidence issue your team is trying to organize.
             Liberty Tree will review the general scope and respond with an
-            appropriate next step.
+            evidence-focused path for review.
           </p>
         </div>
       </section>
