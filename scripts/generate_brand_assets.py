@@ -187,7 +187,12 @@ def make_horizontal(image: np.ndarray) -> str:
 
 
 def make_compact(image: np.ndarray) -> str:
-    body = small_tree_icon(stroke=NAVY, accent=NAVY_SOFT, stroke_scale=1.0)
+    path, mark_w, mark_h = traced_mark(image, target_width=112, simplify=0.82, min_area=2.2)
+    y = (128 - mark_h) / 2
+    body = f"""  <g transform="translate(8 {y:.1f})">
+    <path d="{path}" fill="{NAVY}" fill-rule="evenodd"/>
+  </g>
+"""
     return svg_document(
         128,
         128,
@@ -198,8 +203,12 @@ def make_compact(image: np.ndarray) -> str:
 
 
 def make_favicon(image: np.ndarray) -> str:
+    path, mark_w, mark_h = traced_mark(image, target_width=58, simplify=0.72, min_area=1.2)
+    y = (64 - mark_h) / 2
     body = f"""  <rect width="64" height="64" fill="{NAVY}"/>
-{small_tree_icon(stroke=BUFF_LIGHT, accent=BUFF, stroke_scale=1.0, transform="translate(2.5 6) scale(.46)")}
+  <g transform="translate(3 {y:.1f})">
+    <path d="{path}" fill="{BUFF_LIGHT}" fill-rule="evenodd"/>
+  </g>
 """
     return svg_document(
         64,
@@ -211,20 +220,15 @@ def make_favicon(image: np.ndarray) -> str:
 
 
 def make_seal(image: np.ndarray) -> str:
-    path, mark_w, mark_h = traced_mark(image, target_width=230, simplify=0.95, min_area=2.5)
+    path, mark_w, mark_h = traced_mark(image, target_width=260, simplify=0.95, min_area=2.5)
     body = f"""  <circle cx="260" cy="260" r="232" fill="{IVORY}" stroke="{NAVY}" stroke-width="8"/>
-  <circle cx="260" cy="260" r="212" fill="none" stroke="{BUFF}" stroke-width="4"/>
-  <circle cx="260" cy="260" r="166" fill="none" stroke="{BUFF}" stroke-width="2"/>
-  <path id="sealTop" d="M86 267a174 174 0 0 1 348 0" fill="none"/>
-  <text fill="{NAVY}" font-family="Georgia, Cambria, 'Times New Roman', serif" font-size="25" letter-spacing="1.4">
+  <path id="sealTop" d="M91 262a169 169 0 0 1 338 0" fill="none"/>
+  <text fill="{NAVY}" font-family="Georgia, Cambria, 'Times New Roman', serif" font-size="23" letter-spacing="1.2">
     <textPath href="#sealTop" startOffset="50%" text-anchor="middle">LIBERTY TREE COMPLIANCE</textPath>
   </text>
-  <g transform="translate(145 147)">
+  <g transform="translate(116 174)">
     <path d="{path}" fill="{NAVY}" fill-rule="evenodd"/>
   </g>
-  <text x="260" y="390" text-anchor="middle" fill="{NAVY}" font-family="Inter, Arial, sans-serif" font-size="16" letter-spacing=".5">PFAS EVIDENCE PACKETS</text>
-  <path d="M202 413h116" stroke="{BUFF}" stroke-width="2.4"/>
-  <text x="260" y="438" text-anchor="middle" fill="{MUTED}" font-family="Inter, Arial, sans-serif" font-size="10.5" letter-spacing=".7">SOURCE-INDEXED EVIDENCE RECORDS</text>
 """
     return svg_document(
         520,

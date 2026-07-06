@@ -2,17 +2,8 @@
   <title id="title">Liberty Tree Icon</title>
   <desc id="desc">Small-size Liberty Tree icon optimized for favicon and app icon use.</desc>
   <rect width="64" height="64" fill="#17375e"/>
-  <g transform="translate(2.5 6) scale(.46)" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M64 108c4-24 3-47-2-70" stroke="#e6d8b8" stroke-width="6.80"/>
-    <path d="M62 47c-17-11-36-13-54-7" stroke="#e6d8b8" stroke-width="5.40"/>
-    <path d="M63 47c20-14 42-17 62-8" stroke="#e6d8b8" stroke-width="5.40"/>
-    <path d="M64 64c-23-1-41 6-57 20" stroke="#e6d8b8" stroke-width="4.80"/>
-    <path d="M65 64c24-5 43 1 58 15" stroke="#e6d8b8" stroke-width="4.80"/>
-    <path d="M24 39c12-14 35-17 51-6" stroke="#d9c6a3" stroke-width="3.00"/>
-    <path d="M76 33c17-8 38-4 51 10" stroke="#d9c6a3" stroke-width="3.00"/>
-    <path d="M13 84c15-10 35-12 51-4" stroke="#d9c6a3" stroke-width="2.80"/>
-    <path d="M68 80c18-9 41-5 55 9" stroke="#d9c6a3" stroke-width="2.80"/>
-    <path d="M40 108c15 6 40 6 57 0" stroke="#e6d8b8" stroke-width="3.20"/>
+  <g transform="translate(3 12.5)">
+    <path d="M43.0,34.0 L43.0,36.0 L51.0,36.0 L50.0,34.0 L47.0,34.0 L46.0,33.0 Z M14.0,21.0 L11.0,23.0 L8.0,23.0 L9.0,26.0 L12.0,26.0 L12.0,24.0 Z M26.0,17.0 L29.0,19.0 L31.0,23.0 L29.0,26.0 L27.0,24.0 L23.0,23.0 L27.0,21.0 L22.0,20.0 Z M25.0,13.0 L27.0,13.0 L29.0,15.0 L27.0,17.0 L25.0,16.0 Z M33.0,13.0 L37.0,12.0 L40.0,14.0 L38.0,16.0 Z M50.0,6.0 L47.0,9.0 L40.0,11.0 L41.0,8.0 L34.0,7.0 L37.0,5.0 L35.0,5.0 L34.0,7.0 L28.0,8.0 L27.0,12.0 L25.0,10.0 L26.0,6.0 L21.0,7.0 L21.0,10.0 L23.0,11.0 L20.0,14.0 L16.0,13.0 L13.0,15.0 L13.0,17.0 L17.0,15.0 L20.0,16.0 L22.0,14.0 L23.0,17.0 L21.0,19.0 L16.0,20.0 L18.0,23.0 L19.0,20.0 L22.0,21.0 L22.0,24.0 L26.0,25.0 L29.0,28.0 L34.0,27.0 L32.0,35.0 L35.0,36.0 L40.0,34.0 L38.0,34.0 L35.0,30.0 L40.0,22.0 L44.0,22.0 L45.0,25.0 L52.0,25.0 L52.0,22.0 L49.0,22.0 L48.0,23.0 L44.0,22.0 L44.0,19.0 L42.0,18.0 L47.0,15.0 L55.0,16.0 L54.0,14.0 L50.0,13.0 L48.0,9.0 L50.0,8.0 Z" fill="#e6d8b8" fill-rule="evenodd"/>
   </g>
 
 </svg>
