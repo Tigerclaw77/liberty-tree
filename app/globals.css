@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fbfaf7;
+  --foreground: #18212f;
+  --muted: #5b6676;
+  --line: #ded8cc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: #d9c7a8;
+  color: #0f2742;
+}
+
+@layer components {
+  .site-shell {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .site-header {
+    @apply sticky top-0 z-50 border-b border-[#e5ded1] bg-bone/95 backdrop-blur;
+  }
+
+  .header-inner {
+    @apply flex min-h-20 items-center justify-between gap-6;
+  }
+
+  .brand {
+    @apply flex items-center gap-3 text-ink;
+  }
+
+  .brand-mark {
+    @apply grid h-11 w-11 place-items-center border border-navy bg-navy font-serif text-sm tracking-[0.18em] text-white;
+  }
+
+  .brand strong {
+    @apply block font-serif text-lg font-normal leading-none text-navy;
+  }
+
+  .brand small {
+    @apply mt-1 block text-[0.7rem] uppercase tracking-[0.22em] text-slate;
+  }
+
+  .desktop-nav {
+    @apply hidden items-center gap-8 text-sm font-medium text-slate md:flex;
+  }
+
+  .desktop-nav a,
+  .mobile-nav a,
+  .site-footer a {
+    @apply transition-colors hover:text-navy-soft;
+  }
+
+  .mobile-nav {
+    @apply relative md:hidden;
+  }
+
+  .mobile-nav summary {
+    @apply cursor-pointer list-none border border-[#cfc6b8] px-4 py-2 text-sm font-medium text-navy;
+  }
+
+  .mobile-nav summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav nav {
+    @apply absolute right-0 top-12 grid min-w-64 gap-1 border border-[#d6cebf] bg-bone p-3 shadow-soft;
+  }
+
+  .mobile-nav a {
+    @apply px-3 py-3 text-sm font-medium text-slate;
+  }
+
+  .section-band {
+    @apply border-t border-[#e5ded1] py-20 sm:py-24;
+  }
+
+  .section-heading {
+    @apply max-w-3xl;
+  }
+
+  .section-heading h2 {
+    @apply mt-3 font-serif text-3xl font-normal leading-tight text-navy sm:text-4xl;
+  }
+
+  .section-heading p {
+    @apply mt-5 text-base leading-8 text-muted sm:text-lg;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.24em] text-brass;
+  }
+
+  .button-primary,
+  .button-secondary {
+    @apply inline-flex min-h-12 items-center justify-center border px-6 text-sm font-semibold transition-colors;
+  }
+
+  .button-primary {
+    @apply border-navy bg-navy text-white hover:border-navy-soft hover:bg-navy-soft;
+  }
+
+  .button-secondary {
+    @apply border-[#bdb3a4] bg-transparent text-navy hover:border-navy hover:bg-white;
+  }
+
+  .quiet-card {
+    @apply border border-[#ded8cc] bg-white p-6 shadow-[0_18px_48px_rgba(15,39,66,0.05)];
+  }
+
+  .quiet-card h3 {
+    @apply font-serif text-xl font-normal text-navy;
+  }
+
+  .quiet-card p,
+  .quiet-card li {
+    @apply mt-3 text-sm leading-7 text-muted;
+  }
+
+  .numbered-step {
+    @apply border-l border-[#cfc6b8] pl-6;
+  }
+
+  .numbered-step span {
+    @apply mb-4 inline-grid h-9 w-9 place-items-center border border-brass font-serif text-sm text-brass;
+  }
+
+  .numbered-step h3 {
+    @apply font-serif text-xl font-normal text-navy;
+  }
+
+  .numbered-step p {
+    @apply mt-3 text-sm leading-7 text-muted;
+  }
+
+  .page-hero {
+    @apply border-b border-[#e5ded1] py-20 sm:py-24;
+  }
+
+  .page-hero h1 {
+    @apply mt-4 max-w-4xl font-serif text-4xl font-normal leading-tight text-navy sm:text-5xl;
+  }
+
+  .page-hero p {
+    @apply mt-6 max-w-3xl text-lg leading-8 text-muted;
+  }
+
+  .content-grid {
+    @apply grid gap-8 lg:grid-cols-3;
+  }
+
+  .content-main {
+    @apply lg:col-span-2;
+  }
+
+  .rich-text h2 {
+    @apply mt-12 font-serif text-3xl font-normal text-navy first:mt-0;
+  }
+
+  .rich-text h3 {
+    @apply mt-8 font-serif text-2xl font-normal text-navy;
+  }
+
+  .rich-text p,
+  .rich-text li {
+    @apply text-base leading-8 text-muted;
+  }
+
+  .rich-text p {
+    @apply mt-4;
+  }
+
+  .rich-text ul {
+    @apply mt-4 grid gap-3;
+  }
+
+  .site-footer {
+    @apply border-t border-[#d8d0c2] bg-[#f2ede3] py-12;
+  }
+
+  .footer-grid {
+    @apply grid gap-8 text-sm leading-7 text-muted md:grid-cols-[1.2fr_0.8fr_1.4fr];
+  }
+
+  .footer-brand {
+    @apply font-serif text-xl text-navy;
+  }
+
+  .site-footer nav {
+    @apply grid content-start gap-3 text-navy;
+  }
+
+  .footer-note {
+    @apply border-l border-[#c9bda9] pl-5 text-xs leading-6;
+  }
+}
