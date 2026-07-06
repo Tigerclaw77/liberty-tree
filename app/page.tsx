@@ -99,8 +99,8 @@ export default function Home() {
         </div>
         <div className="hero-art">
           <Image
-            src="/liberty-tree-documents.png"
-            alt="Engraved Liberty Tree illustration with two small hanging lanterns"
+            src="/liberty-tree-five-lanterns-v2.png"
+            alt="Engraved Liberty Tree illustration with five small hanging lanterns"
             width={1624}
             height={969}
             priority

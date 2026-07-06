@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" role="img" aria-labelledby="title desc">
+  <title id="title">Liberty Tree Compliance Report Seal</title>
+  <desc id="desc">Circular engraved Liberty Tree seal for evidence packets, binders, and proposal covers.</desc>
+  <rect width="520" height="520" fill="#fbfaf6"/>
+  <circle cx="260" cy="260" r="232" fill="none" stroke="#17375e" stroke-width="8"/>
+  <circle cx="260" cy="260" r="211" fill="none" stroke="#d9c6a3" stroke-width="4"/>
+  <circle cx="260" cy="260" r="170" fill="none" stroke="#d9c6a3" stroke-width="2"/>
+  <path id="topTextPath" d="M80 258a180 180 0 0 1 360 0" fill="none"/>
+  <text fill="#17375e" font-family="Georgia, Cambria, 'Times New Roman', serif" font-size="30">
+    <textPath href="#topTextPath" startOffset="50%" text-anchor="middle">LIBERTY TREE COMPLIANCE</textPath>
+  </text>
+  <g transform="translate(150 135)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M110 235c4-43 4-83-2-120" stroke="#17375e" stroke-width="7"/>
+    <path d="M108 119c-33-18-67-20-103-7M109 119c38-27 82-34 133-20M110 148c-43 0-79 11-112 34M111 148c46-5 86 4 128 29" stroke="#17375e" stroke-width="5"/>
+    <path d="M5 112c21-28 58-41 94-32 24 6 44 20 58 42M127 88c38-19 83-13 112 16 19 20 30 45 29 74M2 181c28-22 66-27 98-12 19 9 34 23 45 42M147 178c37-17 77-8 102 23" stroke="#17375e" stroke-width="2.6" opacity=".86"/>
+    <path d="M48 148v34M91 158v36M133 157v36M174 165v33M215 168v32" stroke="#8a6f43" stroke-width="2"/>
+    <g stroke="#8a6f43" stroke-width="2">
+      <path d="M40 182h18l4 7v26H36v-26zM40 195h22M42 213h18"/>
+      <path d="M83 194h18l4 7v26H79v-26zM83 207h22M85 225h18"/>
+      <path d="M125 193h18l4 7v26h-26v-26zM125 206h22M127 224h18"/>
+      <path d="M166 198h18l4 7v26h-26v-26zM166 211h22M168 229h18"/>
+      <path d="M207 200h18l4 7v26h-26v-26zM207 213h22M209 231h18"/>
+    </g>
+    <path d="M70 235c33 13 80 13 120 0" stroke="#17375e" stroke-width="3"/>
+  </g>
+  <text x="260" y="396" text-anchor="middle" fill="#17375e" font-family="Inter, Arial, sans-serif" font-size="18">PFAS EVIDENCE PACKETS</text>
+  <path d="M184 413h152" stroke="#d9c6a3" stroke-width="3"/>
+  <text x="260" y="435" text-anchor="middle" fill="#5c6672" font-family="Inter, Arial, sans-serif" font-size="13">SOURCE-INDEXED EVIDENCE RECORDS</text>
+</svg>

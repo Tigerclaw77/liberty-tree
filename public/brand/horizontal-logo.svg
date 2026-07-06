@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" role="img" aria-labelledby="title desc">
+  <title id="title">Liberty Tree Compliance Horizontal Logo</title>
+  <desc id="desc">Simplified engraved tree and Liberty Tree Compliance wordmark for headers and documents.</desc>
+  <rect width="900" height="240" fill="#fbfaf6"/>
+  <g transform="translate(42 24)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M92 178c5-42 4-79-2-111" stroke="#17375e" stroke-width="5"/>
+    <path d="M91 75c-30-17-61-19-93-7M92 74c34-25 76-31 125-18M93 104c-40 1-70 11-97 31M94 104c43-4 80 5 118 27" stroke="#17375e" stroke-width="4"/>
+    <path d="M14 68c20-22 52-32 83-25 21 5 38 17 50 35M119 48c31-17 71-13 97 10 17 15 27 35 30 59M0 134c24-20 58-25 86-13 17 7 31 19 40 35M140 130c31-15 69-8 92 18" stroke="#17375e" stroke-width="2.3" opacity=".86"/>
+    <path d="M45 105v32M91 116v34M135 114v34M181 122v32M218 129v31" stroke="#8a6f43" stroke-width="1.8"/>
+    <g stroke="#8a6f43" stroke-width="1.8">
+      <path d="M36 137h18l3 6v25H33v-25zM36 149h21M38 166h17"/>
+      <path d="M82 150h18l3 6v25H79v-25zM82 162h21M84 179h17"/>
+      <path d="M126 148h18l3 6v25h-24v-25zM126 160h21M128 177h17"/>
+      <path d="M172 154h18l3 6v25h-24v-25zM172 166h21M174 183h17"/>
+      <path d="M209 160h18l3 6v25h-24v-25zM209 172h21M211 189h17"/>
+    </g>
+    <path d="M62 178c29 12 67 13 101 0" stroke="#17375e" stroke-width="2.5"/>
+  </g>
+  <g transform="translate(324 62)">
+    <text x="0" y="62" fill="#17375e" font-family="Georgia, Cambria, 'Times New Roman', serif" font-size="62">Liberty Tree</text>
+    <text x="2" y="106" fill="#20242a" font-family="Inter, Arial, sans-serif" font-size="25">Compliance</text>
+    <path d="M2 130h324" stroke="#d9c6a3" stroke-width="2.5"/>
+  </g>
+</svg>
