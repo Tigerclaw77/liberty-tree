@@ -34,13 +34,13 @@ export default function ContactPage() {
 
       <section className="section-band">
         <div className="site-shell grid gap-12 lg:grid-cols-[1fr_0.85fr]">
-          <form className="grid gap-6 border border-[#ded8cc] bg-white p-6 shadow-soft sm:p-8">
+          <form className="contact-form">
             <div className="grid gap-2">
               <label className="text-sm font-semibold text-navy" htmlFor="name">
                 Name
               </label>
               <input
-                className="border border-[#cfc6b8] bg-bone px-4 py-3 text-ink outline-none focus:border-navy"
+                className="field-control"
                 id="name"
                 name="name"
                 type="text"
@@ -55,7 +55,7 @@ export default function ContactPage() {
                 Company
               </label>
               <input
-                className="border border-[#cfc6b8] bg-bone px-4 py-3 text-ink outline-none focus:border-navy"
+                className="field-control"
                 id="company"
                 name="company"
                 type="text"
@@ -67,7 +67,7 @@ export default function ContactPage() {
                 Email
               </label>
               <input
-                className="border border-[#cfc6b8] bg-bone px-4 py-3 text-ink outline-none focus:border-navy"
+                className="field-control"
                 id="email"
                 name="email"
                 type="email"
@@ -79,7 +79,7 @@ export default function ContactPage() {
                 Area of concern
               </label>
               <select
-                className="border border-[#cfc6b8] bg-bone px-4 py-3 text-ink outline-none focus:border-navy"
+                className="field-control"
                 id="area"
                 name="area"
                 defaultValue=""
@@ -102,7 +102,7 @@ export default function ContactPage() {
                 Message
               </label>
               <textarea
-                className="min-h-40 resize-y border border-[#cfc6b8] bg-bone px-4 py-3 text-ink outline-none focus:border-navy"
+                className="field-control min-h-40 resize-y"
                 id="message"
                 name="message"
               />

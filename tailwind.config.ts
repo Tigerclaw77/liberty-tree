@@ -9,15 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#18212f",
-        slate: "#334155",
-        navy: "#0f2742",
-        "navy-soft": "#173a5f",
-        parchment: "#f7f3ea",
-        bone: "#fbfaf7",
-        muted: "#5b6676",
+        ink: "#20242a",
+        slate: "#3f4a56",
+        navy: "#17375e",
+        "navy-soft": "#214a76",
+        buff: "#d9c6a3",
+        "buff-light": "#e6d8b8",
+        "buff-soft": "#f3ead8",
+        bone: "#fbfaf6",
+        muted: "#5c6672",
         sage: "#71806f",
-        brass: "#9b7b4f",
+        brass: "#8a6f43",
       },
       fontFamily: {
         serif: ["Georgia", "Cambria", "\"Times New Roman\"", "Times", "serif"],

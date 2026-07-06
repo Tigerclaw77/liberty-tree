@@ -3,10 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #fbfaf7;
-  --foreground: #18212f;
-  --muted: #5b6676;
-  --line: #ded8cc;
+  --background: #fbfaf6;
+  --foreground: #20242a;
+  --muted: #5c6672;
+  --line: #d8c9ad;
+  --navy: #17375e;
+  --navy-soft: #214a76;
+  --buff: #d9c6a3;
+  --buff-light: #e6d8b8;
+  --ivory: #fbfaf6;
+  --brass: #8a6f43;
 }
 
 * {
@@ -38,8 +44,8 @@ textarea {
 }
 
 ::selection {
-  background: #d9c7a8;
-  color: #0f2742;
+  background: var(--buff-light);
+  color: var(--navy);
 }
 
 @layer components {
@@ -48,7 +54,8 @@ textarea {
   }
 
   .site-header {
-    @apply sticky top-0 z-50 border-b border-[#e5ded1] bg-bone/95 backdrop-blur;
+    @apply sticky top-0 z-50 border-b bg-bone/95 backdrop-blur;
+    border-color: rgba(217, 198, 163, 0.72);
   }
 
   .header-inner {
@@ -56,11 +63,13 @@ textarea {
   }
 
   .brand {
-    @apply flex items-center gap-3 text-ink;
+    @apply flex items-center gap-3 text-ink transition-opacity hover:opacity-90;
   }
 
   .brand-mark {
-    @apply grid h-11 w-11 place-items-center border border-navy bg-navy font-serif text-sm tracking-[0.18em] text-white;
+    @apply grid h-11 w-11 place-items-center border bg-navy font-serif text-sm text-buff-light;
+    border-color: var(--buff);
+    box-shadow: inset 0 0 0 2px rgba(217, 198, 163, 0.18);
   }
 
   .brand strong {
@@ -68,7 +77,7 @@ textarea {
   }
 
   .brand small {
-    @apply mt-1 block text-[0.7rem] uppercase tracking-[0.22em] text-slate;
+    @apply mt-1 block text-[0.7rem] uppercase text-slate;
   }
 
   .desktop-nav {
@@ -81,12 +90,26 @@ textarea {
     @apply transition-colors hover:text-navy-soft;
   }
 
+  .desktop-nav a {
+    @apply relative py-2;
+  }
+
+  .desktop-nav a::after {
+    @apply absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 transition-transform content-[''];
+    background: var(--buff);
+  }
+
+  .desktop-nav a:hover::after {
+    @apply scale-x-100;
+  }
+
   .mobile-nav {
     @apply relative md:hidden;
   }
 
   .mobile-nav summary {
-    @apply cursor-pointer list-none border border-[#cfc6b8] px-4 py-2 text-sm font-medium text-navy;
+    @apply cursor-pointer list-none border px-4 py-2 text-sm font-medium text-navy transition-colors hover:bg-buff-soft;
+    border-color: var(--line);
   }
 
   .mobile-nav summary::-webkit-details-marker {
@@ -94,7 +117,8 @@ textarea {
   }
 
   .mobile-nav nav {
-    @apply absolute right-0 top-12 grid min-w-64 gap-1 border border-[#d6cebf] bg-bone p-3 shadow-soft;
+    @apply absolute right-0 top-12 grid min-w-64 gap-1 border bg-bone p-3 shadow-soft;
+    border-color: var(--line);
   }
 
   .mobile-nav a {
@@ -102,7 +126,44 @@ textarea {
   }
 
   .section-band {
-    @apply border-t border-[#e5ded1] py-20 sm:py-24;
+    @apply relative border-t py-20 sm:py-24;
+    border-color: rgba(217, 198, 163, 0.62);
+  }
+
+  .section-band::before {
+    @apply absolute left-1/2 top-0 h-px w-[min(72rem,calc(100%-2.5rem))] -translate-x-1/2 content-[''];
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(138, 111, 67, 0.18),
+      rgba(23, 55, 94, 0.24),
+      rgba(138, 111, 67, 0.18),
+      transparent
+    );
+  }
+
+  .home-hero {
+    @apply relative;
+  }
+
+  .home-hero::after {
+    @apply absolute bottom-0 left-8 right-8 hidden h-px content-[''] sm:block;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(217, 198, 163, 0.72),
+      transparent
+    );
+  }
+
+  .hero-art {
+    @apply relative border bg-white p-3 shadow-soft sm:p-4;
+    border-color: rgba(217, 198, 163, 0.88);
+  }
+
+  .hero-art::before {
+    @apply pointer-events-none absolute inset-2 border content-[''];
+    border-color: rgba(23, 55, 94, 0.12);
   }
 
   .section-heading {
@@ -118,24 +179,44 @@ textarea {
   }
 
   .eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.24em] text-brass;
+    @apply text-xs font-semibold uppercase text-brass;
   }
 
   .button-primary,
   .button-secondary {
-    @apply inline-flex min-h-12 items-center justify-center border px-6 text-sm font-semibold transition-colors;
+    @apply inline-flex min-h-12 items-center justify-center border px-6 text-sm font-semibold transition-all duration-200;
   }
 
   .button-primary {
-    @apply border-navy bg-navy text-white hover:border-navy-soft hover:bg-navy-soft;
+    @apply border-navy bg-navy text-white hover:border-buff hover:bg-navy-soft hover:text-buff-light;
+    box-shadow: inset 0 -2px 0 rgba(217, 198, 163, 0);
+  }
+
+  .button-primary:hover {
+    box-shadow: inset 0 -2px 0 rgba(217, 198, 163, 0.58);
   }
 
   .button-secondary {
-    @apply border-[#bdb3a4] bg-transparent text-navy hover:border-navy hover:bg-white;
+    @apply border bg-bone text-navy hover:border-buff hover:bg-buff-soft;
+    border-color: rgba(23, 55, 94, 0.42);
   }
 
   .quiet-card {
-    @apply border border-[#ded8cc] bg-white p-6 shadow-[0_18px_48px_rgba(15,39,66,0.05)];
+    @apply relative border bg-white p-6 shadow-[0_18px_48px_rgba(23,55,94,0.055)] transition-transform duration-200;
+    border-color: rgba(217, 198, 163, 0.82);
+  }
+
+  .quiet-card::before {
+    @apply absolute left-6 right-6 top-0 h-px content-[''];
+    background: linear-gradient(
+      90deg,
+      rgba(138, 111, 67, 0.38),
+      rgba(217, 198, 163, 0.12)
+    );
+  }
+
+  .quiet-card:hover {
+    @apply -translate-y-0.5;
   }
 
   .quiet-card h3 {
@@ -148,11 +229,13 @@ textarea {
   }
 
   .numbered-step {
-    @apply border-l border-[#cfc6b8] pl-6;
+    @apply border-l pl-6;
+    border-color: var(--line);
   }
 
   .numbered-step span {
-    @apply mb-4 inline-grid h-9 w-9 place-items-center border border-brass font-serif text-sm text-brass;
+    @apply mb-4 inline-grid h-9 w-9 place-items-center border bg-bone font-serif text-sm text-brass;
+    border-color: rgba(138, 111, 67, 0.58);
   }
 
   .numbered-step h3 {
@@ -164,7 +247,22 @@ textarea {
   }
 
   .page-hero {
-    @apply border-b border-[#e5ded1] py-20 sm:py-24;
+    @apply relative border-b py-20 sm:py-24;
+    border-color: rgba(217, 198, 163, 0.68);
+    background:
+      linear-gradient(180deg, rgba(230, 216, 184, 0.2), transparent 45%),
+      var(--ivory);
+  }
+
+  .page-hero::after {
+    @apply absolute bottom-0 left-1/2 h-px w-[min(72rem,calc(100%-2.5rem))] -translate-x-1/2 content-[''];
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(23, 55, 94, 0.26),
+      rgba(217, 198, 163, 0.62),
+      transparent
+    );
   }
 
   .page-hero h1 {
@@ -204,16 +302,52 @@ textarea {
     @apply mt-4 grid gap-3;
   }
 
+  .rich-text li {
+    @apply relative pl-5;
+  }
+
+  .rich-text li::before {
+    @apply absolute left-0 top-[0.85rem] h-1.5 w-1.5 content-[''];
+    background: var(--buff);
+  }
+
+  .contact-form {
+    @apply grid gap-6 border bg-white p-6 shadow-soft sm:p-8;
+    border-color: rgba(217, 198, 163, 0.88);
+  }
+
+  .field-control {
+    @apply w-full border bg-bone px-4 py-3 text-ink outline-none transition-colors;
+    border-color: rgba(138, 111, 67, 0.34);
+  }
+
+  .field-control:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(217, 198, 163, 0.28);
+  }
+
   .site-footer {
-    @apply border-t border-[#d8d0c2] bg-[#f2ede3] py-12;
+    @apply border-t py-12;
+    border-color: rgba(23, 55, 94, 0.16);
+    background:
+      linear-gradient(180deg, rgba(230, 216, 184, 0.42), rgba(251, 250, 246, 0.9)),
+      #f5efe2;
   }
 
   .footer-grid {
     @apply grid gap-8 text-sm leading-7 text-muted md:grid-cols-[1.2fr_0.8fr_1.4fr];
   }
 
+  .footer-brand-row {
+    @apply mb-3 flex items-center gap-3 text-navy;
+  }
+
   .footer-brand {
     @apply font-serif text-xl text-navy;
+  }
+
+  .footer-lantern {
+    @apply h-9 w-7 text-brass;
   }
 
   .site-footer nav {
@@ -221,6 +355,11 @@ textarea {
   }
 
   .footer-note {
-    @apply border-l border-[#c9bda9] pl-5 text-xs leading-6;
+    @apply border-l pl-5 text-xs leading-6;
+    border-color: rgba(138, 111, 67, 0.42);
+  }
+
+  .site-footer a:hover {
+    color: var(--brass);
   }
 }

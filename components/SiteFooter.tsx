@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LanternMark } from "@/components/LanternMark";
 import { navigation } from "@/lib/site";
 
 export function SiteFooter() {
@@ -6,7 +7,10 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="site-shell footer-grid">
         <div>
-          <p className="footer-brand">Liberty Tree Compliance</p>
+          <div className="footer-brand-row">
+            <LanternMark className="footer-lantern" />
+            <p className="footer-brand">Liberty Tree Compliance</p>
+          </div>
           <p>
             Boutique compliance evidence services for manufacturers responding
             to emerging documentation requirements.

@@ -53,7 +53,7 @@ const processSteps = [
 export default function Home() {
   return (
     <>
-      <section className="site-shell grid gap-12 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <section className="site-shell home-hero grid gap-12 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div>
           <p className="eyebrow">Boutique compliance evidence services</p>
           <h1 className="mt-5 max-w-3xl font-serif text-5xl font-normal leading-tight text-navy sm:text-6xl">
@@ -73,12 +73,12 @@ export default function Home() {
             </ButtonLink>
           </div>
         </div>
-        <div className="relative border border-[#ded8cc] bg-white p-4 shadow-soft">
+        <div className="hero-art">
           <Image
             src="/liberty-tree-documents.png"
-            alt="Restrained illustration of organized documents and a liberty tree branch"
-            width={1536}
-            height={1024}
+            alt="Engraved Liberty Tree illustration with two small hanging lanterns"
+            width={1624}
+            height={969}
             priority
             className="h-auto w-full"
           />
