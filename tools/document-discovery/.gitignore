@@ -1,3 +1,5 @@
 .runtime-cache/
 output/
+workbench/sessions/
+workbench/exports/
 *.log
