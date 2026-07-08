@@ -12,10 +12,21 @@ const CATEGORY_ORDER = [
 
 export function getCategory(document) {
   const type = String(document.document_type || "").toLowerCase();
-  const text = `${document.title || ""} ${document.url || ""}`.toLowerCase();
+  const text = [
+    document.category,
+    document.title,
+    document.url,
+    document.confidence_reason,
+    document.extracted_text,
+    document.text_sample,
+    ...(Array.isArray(document.notes) ? document.notes : []),
+    ...(Array.isArray(document.matched_terms) ? document.matched_terms : []),
+  ].filter(Boolean).join(" ").toLowerCase();
 
   if (type.includes("sds") || text.includes("/sds/") || text.includes("/msds/") || text.includes("sds-")) return "SDS";
+  if (text.includes("safety data sheet") || text.includes("material safety data sheet")) return "SDS";
   if (type.includes("tds") || text.includes("/tds/") || text.includes("tds-")) return "TDS";
+  if (text.includes("technical data sheet")) return "TDS";
   if (type.includes("pfas") || text.includes("pfas")) return "PFAS";
   if (type.includes("rohs") || text.includes("rohs")) return "RoHS";
   if (type.includes("tsca") || text.includes("tsca")) return "TSCA";

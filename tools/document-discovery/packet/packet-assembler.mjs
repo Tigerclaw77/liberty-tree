@@ -94,7 +94,17 @@ function isVerified(document) {
 }
 
 function documentCategory(document) {
-  const text = `${document.category || ""} ${document.document_type || ""} ${document.title || ""} ${document.url || ""}`.toLowerCase();
+  const text = [
+    document.category,
+    document.document_type,
+    document.title,
+    document.url,
+    document.confidence_reason,
+    document.extracted_text,
+    document.text_sample,
+    ...(Array.isArray(document.notes) ? document.notes : []),
+    ...(Array.isArray(document.matched_terms) ? document.matched_terms : []),
+  ].filter(Boolean).join(" ").toLowerCase();
   if (text.includes("pfas") || text.includes("polyfluoro")) return "PFAS";
   if (text.includes("sds") || text.includes("msds") || text.includes("safety data sheet")) return "SDS";
   if (text.includes("tds") || text.includes("technical data sheet")) return "TDS";

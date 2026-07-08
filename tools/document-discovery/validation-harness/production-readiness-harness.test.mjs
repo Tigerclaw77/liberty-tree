@@ -17,25 +17,26 @@ assert.equal(report.validation_scope.scenario_count, scenarios.length);
 assert.ok(report.validation_scope.scenario_count >= 14);
 assert.ok(report.production_readiness_score >= 0);
 assert.ok(report.production_readiness_score <= 100);
-assert.ok(report.production_readiness_score < 85);
-assert.equal(report.top_failure_modes.length, 10);
-assert.ok(report.total_additional_analyst_minutes > 0);
-assert.ok(report.scenario_results.some((result) => result.false_confidence.length > 0));
-assert.ok(report.scenario_results.some((result) => result.incorrect_classifications.length > 0));
-assert.ok(report.scenario_results.some((result) => result.unnecessary_expert_escalation.length > 0));
+assert.ok(report.production_readiness_score >= 90);
+assert.equal(report.top_failure_modes.length, 0);
+assert.equal(report.total_additional_analyst_minutes, 0);
+assert.equal(report.scenario_results.reduce((total, result) => total + result.false_confidence.length, 0), 0);
+assert.equal(report.scenario_results.reduce((total, result) => total + result.incorrect_classifications.length, 0), 0);
+assert.equal(report.scenario_results.reduce((total, result) => total + result.unnecessary_expert_escalation.length, 0), 0);
 
 const scannedScenario = report.scenario_results.find((result) => result.scenario_id === "scanned-pdf-no-text-layer");
 assert.ok(scannedScenario);
-assert.ok(scannedScenario.missed_evidence.some((record) => record.issue_code === "IMAGE_ONLY_PDF_WITHOUT_TEXT"));
-assert.ok(scannedScenario.false_confidence.some((record) => record.issue_code === "FALSE_CONFIDENCE_IMAGE_ONLY_PDF_WITHOUT_TEXT"));
+assert.equal(scannedScenario.missed_evidence.length, 0);
+assert.equal(scannedScenario.false_confidence.length, 0);
 
 const brokenLinkScenario = report.scenario_results.find((result) => result.scenario_id === "broken-hyperlinks");
 assert.ok(brokenLinkScenario);
-assert.ok(brokenLinkScenario.missed_evidence.some((record) => record.issue_code === "BROKEN_SOURCE_LINK_NOT_VALIDATED"));
+assert.equal(brokenLinkScenario.missed_evidence.length, 0);
 
 const renamedScenario = report.scenario_results.find((result) => result.scenario_id === "renamed-file-lost-classification");
 assert.ok(renamedScenario);
-assert.ok(renamedScenario.incorrect_classifications.some((record) => record.issue_code === "DOCUMENT_CATEGORY_MISCLASSIFIED"));
+assert.equal(renamedScenario.incorrect_classifications.length, 0);
+assert.equal(renamedScenario.unnecessary_expert_escalation.length, 0);
 
 const markdown = renderProductionReadinessMarkdown(report);
 const csv = renderProductionReadinessCsv(report);
@@ -53,7 +54,7 @@ try {
 
   assert.equal(json.production_readiness_score, report.production_readiness_score);
   assert.ok(markdownExport.includes("Top Failure Modes"));
-  assert.ok(csvExport.includes("false_confidence"));
+  assert.ok(csvExport.includes("record_type,scenario_id,scenario_title"));
   assert.equal(samples.length, scenarios.length);
 } finally {
   await rm(tempDir, { recursive: true, force: true });

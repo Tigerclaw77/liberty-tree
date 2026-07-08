@@ -72,9 +72,19 @@ function textFor(document) {
     document.url,
     document.document_type,
     document.confidence_reason,
+    document.extracted_text,
+    document.text_sample,
     ...(Array.isArray(document.notes) ? document.notes : []),
     ...(Array.isArray(document.matched_terms) ? document.matched_terms : []),
   ].filter(Boolean).join(" "));
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function termPattern(term) {
+  return new RegExp(`(^|[^a-z0-9])${escapeRegExp(String(term).toLowerCase())}([^a-z0-9]|$)`, "i");
 }
 
 function productTerms(query) {
@@ -86,18 +96,78 @@ function productTerms(query) {
 }
 
 function containsTerm(text, term) {
-  return Boolean(term) && text.includes(String(term).toLowerCase());
+  return Boolean(term) && termPattern(term).test(text);
+}
+
+function hasNonPositiveTermContext(text, term) {
+  if (!term || !containsTerm(text, term)) return false;
+  const escaped = escapeRegExp(String(term).toLowerCase());
+  const token = `${escaped}(?=$|[^a-z0-9])`;
+  const prefix = "(?:does\\s+not|do\\s+not|did\\s+not|not|no|without|lacks?|missing|omits?|excludes?)";
+  const scopeVerb = "(?:\\s+(?:list|include|identify|reference|cover|apply\\s+to|match|show|state|name))?";
+  const uncertainty = "(?:may\\s+be|might\\s+be|could\\s+be|possibly|appears\\s+to\\s+be|ambiguous)";
+  const patterns = [
+    new RegExp(`${prefix}${scopeVerb}\\s+(?:the\\s+)?${token}`, "i"),
+    new RegExp(`(?:rather\\s+than|instead\\s+of|not\\s+for)\\s+(?:the\\s+)?${token}`, "i"),
+    new RegExp(`${uncertainty}\\s+(?:the\\s+)?${token}`, "i"),
+    new RegExp(`(?:^|[^a-z0-9])${escaped}[^a-z0-9]+(?:is\\s+)?(?:not\\s+listed|not\\s+included|missing|omitted|excluded)`, "i"),
+  ];
+  return patterns.some((pattern) => pattern.test(text));
+}
+
+function containsPositiveTerm(text, term) {
+  return containsTerm(text, term) && !hasNonPositiveTermContext(text, term);
 }
 
 function productMatch(document, query) {
   const text = textFor(document);
   const terms = productTerms(query);
-  const matched = terms.filter((term) => containsTerm(text, term));
+  const matched = terms.filter((term) => containsPositiveTerm(text, term));
   return {
     matched,
-    hasCode: Boolean(query.productCode && containsTerm(text, query.productCode)),
-    hasProduct: containsTerm(text, query.product),
+    hasCode: Boolean(query.productCode && containsPositiveTerm(text, query.productCode)),
+    hasProduct: containsPositiveTerm(text, query.product),
   };
+}
+
+function extractedTextLength(document) {
+  const explicit = [
+    document.extracted_text_length,
+    document.extractable_text_length,
+    document.text_length,
+    document.ocr_text_length,
+  ];
+  for (const value of explicit) {
+    if (value !== undefined && value !== null && value !== "") return Number(value);
+  }
+  const text = `${document.extracted_text || ""}${document.text_sample || ""}`;
+  return text ? text.length : null;
+}
+
+function isImageOnlyOrUnreadable(document) {
+  const text = textFor(document);
+  const textLength = extractedTextLength(document);
+  if (Number.isFinite(textLength) && textLength <= 0) return true;
+  return (
+    /\b(image[-\s]?only|bitmap pages only|embedded images|camera[-\s]?scanned|no text layer|no extractable text|text length is zero|no parsed (?:section )?text)\b/.test(text) ||
+    /\bscanned\b/.test(text) && /\b(no ocr|without ocr|ocr required|extracted text length is zero)\b/.test(text)
+  );
+}
+
+function hasBrokenSource(document) {
+  const text = textFor(document);
+  const status = Number(document.http_status || document.status_code || document.fetch_status_code || 0);
+  if (status >= 400) return true;
+  if (["BROKEN", "DEAD", "FAILED", "UNAVAILABLE", "NOT_FOUND"].includes(String(document.link_status || document.fetch_status || "").toUpperCase())) return true;
+  return /\b(404|410|dead link|broken link|source unavailable|not found|fetch failed)\b/.test(text);
+}
+
+function hasIncompletePageRange(document) {
+  const text = textFor(document);
+  const range = text.match(/\bpages?\s+(\d+)\s*[-–]\s*(\d+)\s+of\s+(\d+)\b/);
+  if (range && Number(range[2]) < Number(range[3])) return true;
+  const count = text.match(/\b(\d+)\s+of\s+(\d+)\s+pages?\b/);
+  return Boolean(count && Number(count[1]) < Number(count[2]));
 }
 
 function manufacturerMismatch(document, query) {
@@ -186,6 +256,8 @@ function scoreAuthenticity(document) {
   if (["HTML_DROPDOWN_OPTION", "PATTERN_PROBE", "SITEMAP"].includes(document.discovery_method)) score += 8;
   if (document.source_page) score += 5;
   if (textFor(document).includes("scanned")) score -= 5;
+  if (isImageOnlyOrUnreadable(document)) score -= 45;
+  if (hasBrokenSource(document)) score -= 40;
   return clamp(score);
 }
 
@@ -238,6 +310,8 @@ function scoreCompleteness(document) {
   if (DECLARATION_CATEGORIES.has(category(document)) && !authorityKnown(document)) score -= 12;
   const text = textFor(document);
   if (/\b(incomplete|missing page|page missing|truncated|partial|illegible)\b/.test(text)) score -= 35;
+  if (hasIncompletePageRange(document)) score -= 35;
+  if (isImageOnlyOrUnreadable(document)) score -= 45;
   if (text.includes("scanned") && !text.includes("ocr")) score -= 10;
   return clamp(score);
 }
@@ -291,6 +365,27 @@ function addDocumentLevelIssues(assessment, query) {
     return;
   }
 
+  if (isImageOnlyOrUnreadable(document)) {
+    const issueType = docCategory === "SDS" ? "IMAGE_ONLY_SDS_WITHOUT_TEXT" : "IMAGE_ONLY_PDF_WITHOUT_TEXT";
+    assessment.issues.push(issue(
+      issueType,
+      "Critical",
+      `${docCategory} source appears image-only or lacks extractable text.`,
+      "Source metadata or analyst notes indicate scanned/image pages without validated extractable text.",
+      "Require OCR completion or human readback verification before relying on this document.",
+    ));
+  }
+
+  if (hasBrokenSource(document)) {
+    assessment.issues.push(issue(
+      "BROKEN_SOURCE_LINK_NOT_VALIDATED",
+      "High",
+      "Source URL appears unavailable or was not retrievable.",
+      "Source metadata includes a failed HTTP status, broken-link cue, or unavailable-source marker.",
+      "Re-fetch the source, attach a stable copy, or replace the document before relying on it.",
+    ));
+  }
+
   if (PRODUCT_SPECIFIC_CATEGORIES.has(docCategory) && query.productCode && !match.hasCode && /\b(sds|tds|declaration|pfas|reach|rohs|tsca|prop)\b/.test(text)) {
     assessment.issues.push(issue(
       "PRODUCT_CODE_MISMATCH",
@@ -328,6 +423,16 @@ function addDocumentLevelIssues(assessment, query) {
       `${docCategory} declaration appears generic rather than product-specific.`,
       "The packet request is product-specific, but the source does not clearly identify the requested product/SKU.",
       "Request a product-specific declaration or written mapping before relying on the generic declaration.",
+    ));
+  }
+
+  if (hasIncompletePageRange(document)) {
+    assessment.issues.push(issue(
+      "INCOMPLETE_PAGE_RANGE_NOT_PARSED",
+      "High",
+      "Document page range indicates an incomplete file.",
+      "The source metadata or title identifies fewer delivered pages than the total page count.",
+      "Obtain the complete document before relying on this source.",
     ));
   }
 
@@ -429,6 +534,7 @@ function overallScore(dimensions) {
 }
 
 function exceptionSeverity(issues, score) {
+  if (issues.some((item) => item.severity === "Critical")) return "Critical";
   if (issues.some((item) => item.severity === "High") || score < 60) return "High";
   if (issues.some((item) => item.severity === "Medium") || score < RELIABILITY_THRESHOLD) return "Medium";
   return "Low";

@@ -625,18 +625,7 @@ function buildValidationScenarios() {
         "renamed-file-final-signed": "PFAS",
       },
       expectedReadyWithoutEscalation: true,
-      expectedFindings: [
-        finding({
-          code: "RENAMED_FILE_CONTENT_CUES_IGNORED",
-          documentKeys: ["renamed-file-final-signed"],
-          description: "Classifier should use extracted text/notes when filename and document_type are generic.",
-          failure: "Engine misses product-specific PFAS evidence and may generate a needless supplier request for a declaration already uploaded.",
-          severity: "High",
-          analystMinutes: 28,
-          commercialRisk: 8,
-          smallestCodeChange: "Extend category classification to include confidence_reason, notes, and extracted text snippets, not only title/url/document_type.",
-        }),
-      ],
+      expectedFindings: [],
     }),
     scenario({
       id: "image-only-sds",
