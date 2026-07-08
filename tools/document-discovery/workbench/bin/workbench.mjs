@@ -18,6 +18,7 @@ import {
 import { assignTimeline } from "../core/timeline.mjs";
 import { buildSummary } from "../core/summary.mjs";
 import { exportEvidenceIndex } from "../core/workbench-export.mjs";
+import { writePacketExports } from "../../packet/packet-assembler.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKBENCH_ROOT = path.resolve(__dirname, "..");
@@ -51,6 +52,8 @@ function parseArgs(argv) {
     } else if (arg === "--export-dir") {
       args.exportDir = next;
       index += 1;
+    } else if (arg === "--generate-packet") {
+      args.generatePacket = true;
     } else if (arg === "--no-interactive" || arg === "--export-only") {
       args.interactive = false;
     } else if (arg === "--no-cache") {
@@ -76,6 +79,7 @@ Options:
   --max-pages       Discovery crawl limit, default 25
   --session-dir     Local session decision directory
   --export-dir      Evidence index export directory
+  --generate-packet Also generate draft packet Markdown, HTML, and print HTML
   --export-only     Run, summarize, export, and exit
   --no-interactive  Same as --export-only
   --no-cache        Disable fetch cache
@@ -92,6 +96,7 @@ Interactive commands:
   s                  Show summary
   g                  Show grouped results
   x                  Export evidence-index files
+  p                  Generate Packet
   q                  Save and quit
 `);
 }
@@ -158,6 +163,13 @@ function printSummary(summary) {
   console.log(`Remaining gaps:         ${summary.remaining_gaps}`);
   console.log(`Packet readiness:       ${summary.estimated_packet_readiness}`);
   console.log(`Confidence distribution:${JSON.stringify(summary.confidence_distribution)}`);
+}
+
+function printPacketExports(exports) {
+  console.log(`Packet Markdown: ${exports.markdownPath}`);
+  console.log(`Packet HTML:     ${exports.htmlPath}`);
+  console.log(`PDF-ready HTML:  ${exports.printHtmlPath}`);
+  console.log(`Assembly time:   ${(exports.metrics.previous_analyst_assembly_minutes / 60).toFixed(1)}h -> ${(exports.metrics.new_analyst_assembly_minutes / 60).toFixed(1)}h (${exports.metrics.assembly_reduction_percent.toFixed(1)}% reduction)`);
 }
 
 function findDocument(documents, id) {
@@ -227,6 +239,14 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         continue;
       }
 
+      if (command === "p" || command === "packet") {
+        documents = prepareDocuments(sourceDocuments, session);
+        const summary = buildSummary(documents);
+        const packetExports = await writePacketExports({ documents, summary, query, exportDir });
+        printPacketExports(packetExports);
+        continue;
+      }
+
       if (command === "missing") {
         const category = id || "Other";
         addManualMissingDocument(session, { category, note });
@@ -259,7 +279,7 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         await saveSession(sessionPath, session);
         console.log(`Marked ${id} as ${actionByCommand[command]}.`);
       } else {
-        console.log("Unknown command. Use v/d/i/e/m/c/s/g/x/q.");
+        console.log("Unknown command. Use v/d/i/e/m/c/s/g/x/p/q.");
       }
 
       documents = prepareDocuments(sourceDocuments, session);
@@ -312,6 +332,10 @@ async function main() {
   console.log(`Session:     ${sessionPath}`);
   console.log(`JSON export: ${exports.jsonPath}`);
   console.log(`CSV export:  ${exports.csvPath}`);
+  if (args.generatePacket) {
+    const packetExports = await writePacketExports({ documents, summary, query, exportDir });
+    printPacketExports(packetExports);
+  }
 
   if (args.interactive) {
     await handleInteractive({ sourceDocuments: result.documents, documents, session, sessionPath, exportDir, query });
