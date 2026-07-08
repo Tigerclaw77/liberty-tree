@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { navigation, siteName } from "@/lib/site";
+import { navigation, primaryCta, siteName } from "@/lib/site";
 
 export function SiteHeader() {
   return (
@@ -21,6 +21,9 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <Link className="button-primary min-h-10 px-4 text-[0.72rem]" href={primaryCta.href}>
+            {primaryCta.label}
+          </Link>
         </nav>
 
         <details className="mobile-nav">
@@ -31,6 +34,9 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <Link className="border border-navy bg-navy px-3 py-3 text-white" href={primaryCta.href}>
+              {primaryCta.label}
+            </Link>
           </nav>
         </details>
       </div>

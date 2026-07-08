@@ -81,7 +81,7 @@ textarea {
   }
 
   .desktop-nav {
-    @apply hidden items-center gap-8 text-sm font-medium text-slate md:flex;
+    @apply hidden items-center gap-6 text-sm font-medium text-slate lg:flex;
   }
 
   .desktop-nav a,
@@ -104,7 +104,7 @@ textarea {
   }
 
   .mobile-nav {
-    @apply relative md:hidden;
+    @apply relative lg:hidden;
   }
 
   .mobile-nav summary {

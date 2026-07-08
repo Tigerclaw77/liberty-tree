@@ -91,7 +91,9 @@ export default function Home() {
             clear record.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/contact">Request Consultation</ButtonLink>
+            <ButtonLink href="/start-pfas-engagement">
+              Start a PFAS Evidence Engagement
+            </ButtonLink>
             <ButtonLink href="/pfas-evidence-packets" variant="secondary">
               View PFAS Packets
             </ButtonLink>
@@ -176,8 +178,8 @@ export default function Home() {
               unresolved gaps.
             </SectionHeading>
             <div className="mt-8">
-              <ButtonLink href="/pfas-evidence-packets" variant="secondary">
-                Explore the packet
+              <ButtonLink href="/start-pfas-engagement" variant="secondary">
+                Start a PFAS Evidence Engagement
               </ButtonLink>
             </div>
           </div>
@@ -244,7 +246,9 @@ export default function Home() {
             and current PFAS evidence needs.
           </SectionHeading>
           <div className="shrink-0">
-            <ButtonLink href="/contact">Request Consultation</ButtonLink>
+            <ButtonLink href="/start-pfas-engagement">
+              Start a PFAS Evidence Engagement
+            </ButtonLink>
           </div>
         </div>
       </section>

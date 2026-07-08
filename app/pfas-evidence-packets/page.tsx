@@ -99,7 +99,9 @@ export default function PfasEvidencePacketsPage() {
               or counterparty will accept a submission.
             </p>
             <div className="mt-6">
-              <ButtonLink href="/contact">Request Consultation</ButtonLink>
+              <ButtonLink href="/start-pfas-engagement">
+                Start a PFAS Evidence Engagement
+              </ButtonLink>
             </div>
           </aside>
         </div>

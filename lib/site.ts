@@ -9,3 +9,8 @@ export const navigation = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;
+
+export const primaryCta = {
+  href: "/start-pfas-engagement",
+  label: "Start a PFAS Evidence Engagement",
+} as const;
