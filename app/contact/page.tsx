@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "PFAS Documentation Request Contact",
   description:
-    "Request a consultation with Liberty Tree Compliance about PFAS Evidence Packets or other compliance evidence documentation needs.",
+    "Contact Liberty Tree about PFAS evidence packages for customer documentation requests, supplier records, product lists, SDS, TDS, and declarations.",
   alternates: {
     canonical: "/contact",
   },
@@ -23,11 +23,11 @@ export default function ContactPage() {
       <section className="page-hero">
         <div className="site-shell">
           <p className="eyebrow">Contact</p>
-          <h1>Request a focused consultation.</h1>
+          <h1>Talk through a PFAS documentation request.</h1>
           <p>
-            Share the compliance evidence issue your team is trying to organize.
-            Liberty Tree will review the general scope and respond with an
-            evidence-focused path for review.
+            Share the products, customer request, deadline, and document types
+            already available. Liberty Tree will respond with the likely packet
+            scope and next intake step.
           </p>
         </div>
       </section>

@@ -11,12 +11,12 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description:
-    "Boutique compliance evidence services for manufacturers, beginning with PFAS Evidence Packets.",
+    "PFAS evidence packages for manufacturers responding to customer documentation requests.",
   applicationName: siteName,
   openGraph: {
     title: siteName,
     description:
-      "Documentation-first compliance evidence services for manufacturers.",
+      "Source-indexed PFAS evidence packages for manufacturers.",
     url: siteUrl,
     siteName,
     type: "website",

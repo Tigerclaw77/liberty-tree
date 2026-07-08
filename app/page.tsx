@@ -5,73 +5,99 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { TrustIcon } from "@/components/TrustIcon";
 
 export const metadata: Metadata = {
-  title: "Boutique Compliance Evidence Services",
+  title: "PFAS Evidence Packages for Customer Documentation Requests",
   description:
-    "Liberty Tree Compliance helps manufacturers assemble audit-ready documentation for emerging regulatory requirements, beginning with PFAS evidence packages.",
+    "Liberty Tree helps manufacturers turn SDS, TDS, supplier declarations, product lists, and public records into source-indexed PFAS evidence packages.",
   alternates: {
     canonical: "/",
   },
 };
 
-const deliveryItems = [
-  {
-    title: "Document intake structure",
-    body: "A defined request list, clean source handling, and a practical framework for collecting supplier, product, and customer-request materials.",
-  },
-  {
-    title: "Source-indexed evidence",
-    body: "Documentation organized so each summary, matrix entry, and noted gap can be traced back to the underlying source material.",
-  },
-  {
-    title: "Gap identification",
-    body: "A concise view of missing, stale, inconsistent, or unclear documentation that may require follow-up before a customer or audit response.",
-  },
-  {
-    title: "Human-reviewed deliverables",
-    body: "Fixed-scope packets assembled with careful review, restrained language, and a focus on defensible documentation rather than unsupported conclusions.",
-  },
-];
-
 const trustPillars = [
   {
     icon: "documentation",
-    title: "DOCUMENTATION FIRST",
-    body: "We organize the documentation auditors and customers request.",
+    title: "FOR MANUFACTURERS",
+    body: "Built for teams responding to customer PFAS documentation requests.",
   },
   {
     icon: "source",
     title: "SOURCE-INDEXED",
-    body: "Every conclusion is traceable to supporting documentation.",
+    body: "Every statement is tied to the document that supports it.",
   },
   {
     icon: "review",
     title: "HUMAN REVIEWED",
-    body: "Each deliverable receives expert review before delivery.",
+    body: "Exceptions and final packets receive expert review before delivery.",
   },
   {
     icon: "confidential",
-    title: "CONFIDENTIAL",
-    body: "Projects are handled discreetly and with strict confidentiality.",
+    title: "NO ACCOUNT REQUIRED",
+    body: "Each engagement uses a temporary case portal for status and files.",
   },
 ] as const;
 
-const processSteps = [
+const uploadItems = [
+  "Customer PFAS request, questionnaire, or response template",
+  "Product list, SKUs, part numbers, or product families in scope",
+  "Existing SDS, TDS, test reports, and supplier declarations",
+  "Supplier, manufacturer, and distributor names",
+  "Notes about deadlines, known gaps, or prior customer responses",
+];
+
+const deliverables = [
   {
-    title: "Scope the request",
-    body: "We clarify the products, customer demands, documentation period, and deliverable format before collection begins.",
+    title: "Executive Summary",
+    body: "A plain-language summary of what the available evidence supports, what remains unknown, and what needs follow-up.",
   },
   {
-    title: "Collect the record",
-    body: "Your team provides SDS sheets, supplier declarations, product lists, prior compliance files, and related request materials.",
+    title: "Evidence Matrix",
+    body: "A product-by-product view of documents, declarations, confidence, gaps, and exceptions requiring review.",
   },
   {
-    title: "Organize and review",
-    body: "We build inventories, matrices, and evidence indexes while flagging missing or ambiguous documentation.",
+    title: "Source Index",
+    body: "A traceable list of source documents, issuers, dates, links, document status, and review notes.",
   },
   {
-    title: "Deliver the packet",
-    body: "You receive a structured evidence package designed for internal review, customer response preparation, and audit readiness.",
+    title: "Missing Documentation Register",
+    body: "A focused list of unresolved gaps so unknowns stay visible instead of being buried in narrative text.",
   },
+  {
+    title: "Supplier Request Package",
+    body: "Targeted request lists and email drafts for supplier, manufacturer, or customer evidence that is still missing.",
+  },
+  {
+    title: "Human-Reviewed Final Evidence Package",
+    body: "A final package reviewed for support, consistency, and careful non-certifying language before delivery.",
+  },
+];
+
+const howItWorks = [
+  "Upload what you already have.",
+  "Liberty Tree discovers additional public evidence.",
+  "Missing documentation is identified.",
+  "Supplier requests are prepared.",
+  "Experts review only exceptions.",
+  "You receive a complete evidence package.",
+];
+
+const portalItems = [
+  "Engagement status and progress timeline",
+  "Documents received and still outstanding",
+  "Supplier responses that still need follow-up",
+  "Download area for final deliverables",
+];
+
+const boundaries = [
+  "Laboratory testing",
+  "Compliance certification",
+  "Legal opinions",
+];
+
+const guarantees = [
+  "Every statement is source-indexed.",
+  "Every packet receives human review.",
+  "Missing evidence is clearly identified.",
+  "Unknowns remain unknown.",
 ];
 
 export default function Home() {
@@ -79,23 +105,23 @@ export default function Home() {
     <>
       <section className="site-shell home-hero grid gap-12 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div>
-          <p className="eyebrow">Evidence-first compliance documentation</p>
+          <p className="eyebrow">PFAS evidence packages for manufacturers</p>
           <h1 className="mt-5 max-w-3xl font-serif text-5xl font-normal leading-tight text-navy sm:text-6xl">
-            Compliance evidence. Organized. Defensible. Delivered.
+            Turn scattered PFAS documentation into an organized evidence
+            package.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted">
-            Liberty Tree Compliance helps manufacturers assemble audit-ready
-            documentation for emerging regulatory requirements, beginning with
-            PFAS evidence packages. We structure document collection, evidence
-            organization, and gap identification so your team can respond from a
-            clear record.
+            When a customer asks for PFAS documentation, Liberty Tree organizes
+            the records you already have, finds additional public evidence,
+            identifies missing documents, prepares supplier requests, and
+            delivers a source-indexed package your team can review and use.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/start-pfas-engagement">
               Start a PFAS Evidence Engagement
             </ButtonLink>
             <ButtonLink href="/pfas-evidence-packets" variant="secondary">
-              View PFAS Packets
+              View Packet Deliverables
             </ButtonLink>
           </div>
         </div>
@@ -126,25 +152,19 @@ export default function Home() {
       <section className="section-band bg-white">
         <div className="site-shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <SectionHeading
-            eyebrow="The documentation burden"
-            title="Regulatory responses increasingly depend on the quality of the record."
+            eyebrow="What you send"
+            title="Start with the documents and product list already on your desk."
           >
-            Manufacturers are often asked to respond quickly with evidence that
-            lives across suppliers, product teams, shared drives, emails, and
-            prior customer submissions.
+            The engagement is built for compliance, quality, operations, and
+            sales teams that need a reliable answer to a customer PFAS
+            documentation request.
           </SectionHeading>
-          <div className="grid gap-5 text-base leading-8 text-muted">
-            <p>
-              PFAS and other emerging requirements create a practical problem
-              before they create a legal one: teams must locate the right source
-              documents, understand what each document says, identify what is
-              missing, and prepare a response that does not overstate the record.
-            </p>
-            <p>
-              Liberty Tree focuses on that evidence layer. We help teams move
-              from scattered documentation to a disciplined packet that can be
-              reviewed, updated, and used as the basis for careful next steps.
-            </p>
+          <div className="grid gap-4">
+            {uploadItems.map((item) => (
+              <div className="border-t border-[#d6cebf] pt-4" key={item}>
+                <p className="font-serif text-xl text-navy">{item}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -152,11 +172,14 @@ export default function Home() {
       <section className="section-band">
         <div className="site-shell">
           <SectionHeading
-            eyebrow="What Liberty Tree delivers"
-            title="A structured record for high-stakes documentation requests."
-          />
-          <div className="mt-12 grid gap-5 md:grid-cols-2">
-            {deliveryItems.map((item) => (
+            eyebrow="What you receive"
+            title="Concrete deliverables, not a vague advisory memo."
+          >
+            The packet shows what is supported, where the support came from,
+            what is missing, and which supplier requests should go out next.
+          </SectionHeading>
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {deliverables.map((item) => (
               <article className="quiet-card" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.body}</p>
@@ -167,83 +190,109 @@ export default function Home() {
       </section>
 
       <section className="section-band bg-white">
-        <div className="site-shell grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-          <div>
-            <SectionHeading
-              eyebrow="Initial offer"
-              title="PFAS Evidence Packets for manufacturers."
-            >
-              A fixed-scope documentation package for teams that need a clearer
-              view of PFAS-related product evidence, supplier support, and
-              unresolved gaps.
-            </SectionHeading>
-            <div className="mt-8">
-              <ButtonLink href="/start-pfas-engagement" variant="secondary">
-                Start a PFAS Evidence Engagement
-              </ButtonLink>
-            </div>
-          </div>
-          <div className="quiet-card">
-            <h3>Built for careful review</h3>
-            <p>
-              Each packet is designed to help your compliance team, counsel, and
-              operations reviewers evaluate the available record. Liberty Tree
-              does not certify compliance, provide legal advice, or guarantee
-              regulatory outcomes.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-band">
         <div className="site-shell">
           <SectionHeading
-            eyebrow="Process"
-            title="A clear path from scattered materials to organized evidence."
+            eyebrow="How it works"
+            title="A clear path from customer request to evidence package."
           />
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {processSteps.map((step, index) => (
-              <article className="numbered-step" key={step.title}>
+          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {howItWorks.map((step, index) => (
+              <article className="numbered-step" key={step}>
                 <span>{index + 1}</span>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
+                <h3>{step}</h3>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section-band bg-white">
-        <div className="site-shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="section-band">
+        <div className="site-shell grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <SectionHeading
-            eyebrow="Why Liberty Tree"
-            title="Serious compliance work starts with disciplined evidence."
-          />
-          <div className="grid gap-5 md:grid-cols-2">
-            {[
-              "Documentation-first process",
-              "Source-indexed deliverables",
-              "Confidential project handling",
-              "Fixed-scope engagements",
-              "Human-reviewed summaries",
-              "Careful, non-certifying language",
-            ].map((item) => (
-              <div className="border-t border-[#d6cebf] pt-4" key={item}>
-                <p className="font-serif text-xl text-navy">{item}</p>
-              </div>
+            eyebrow="Pricing"
+            title="Fixed-price engagements starting at $7,500."
+          >
+            Final scope depends primarily on documentation complexity: number of
+            SKUs, supplier count, document quality, missing evidence, and
+            customer deadline pressure. Company size is not the main driver.
+          </SectionHeading>
+          <div className="quiet-card">
+            <h3>What drives scope</h3>
+            <ul className="mt-5 grid gap-3">
+              <li>How many products, SKUs, or product families are in scope.</li>
+              <li>Whether documents are product-specific or generic.</li>
+              <li>How much supplier evidence is missing or conflicting.</li>
+              <li>Whether public documents are available, current, and usable.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-band bg-white">
+        <div className="site-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <SectionHeading
+            eyebrow="Case Portal"
+            title="A temporary engagement workspace with no customer account required."
+          >
+            After intake, your team receives a secure case link for the current
+            engagement. The portal is built for status visibility and file
+            handoff, not a permanent software account.
+          </SectionHeading>
+          <div className="grid gap-4 md:grid-cols-2">
+            {portalItems.map((item) => (
+              <article className="quiet-card" key={item}>
+                <h3>{item}</h3>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       <section className="section-band">
+        <div className="site-shell grid gap-10 lg:grid-cols-2">
+          <div>
+            <SectionHeading
+              eyebrow="Boundaries"
+              title="We organize, validate, and document evidence."
+            >
+              Liberty Tree does not make unsupported claims or replace the
+              reviewers who must make business, technical, or legal decisions.
+            </SectionHeading>
+            <div className="mt-8 grid gap-4">
+              {boundaries.map((item) => (
+                <div className="border-t border-[#d6cebf] pt-4" key={item}>
+                  <p className="font-serif text-xl text-navy">
+                    We do not provide {item.toLowerCase()}.
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <SectionHeading
+              eyebrow="What we guarantee"
+              title="Clear evidence, clear limits, clear next steps."
+            />
+            <div className="mt-8 grid gap-4">
+              {guarantees.map((item) => (
+                <div className="border-t border-[#d6cebf] pt-4" key={item}>
+                  <p className="font-serif text-xl text-navy">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-band bg-white">
         <div className="site-shell flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
             eyebrow="Next step"
-            title="Prepare the record before the request becomes urgent."
+            title="Answer the PFAS request from a documented record."
           >
-            Start with a focused review of your products, documentation sources,
-            and current PFAS evidence needs.
+            Start with the customer request, the product list, and whatever
+            SDS, TDS, supplier declarations, or prior responses you already
+            have.
           </SectionHeading>
           <div className="shrink-0">
             <ButtonLink href="/start-pfas-engagement">

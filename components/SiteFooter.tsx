@@ -12,8 +12,8 @@ export function SiteFooter() {
             <p className="footer-brand">Liberty Tree Compliance</p>
           </div>
           <p>
-            Boutique compliance evidence services for manufacturers responding
-            to emerging documentation requirements.
+            PFAS evidence packages for manufacturers responding to customer
+            documentation requests.
           </p>
         </div>
         <nav aria-label="Footer navigation">
@@ -24,9 +24,9 @@ export function SiteFooter() {
           ))}
         </nav>
         <p className="footer-note">
-          Liberty Tree organizes and reviews documentation for readiness
-          purposes. It does not provide legal advice, regulatory certification,
-          or guarantees of agency, customer, or audit outcomes.
+          Liberty Tree organizes, validates, and documents evidence. It does not
+          perform laboratory testing, certify compliance, provide legal
+          opinions, or guarantee agency, customer, or audit outcomes.
         </p>
       </div>
     </footer>
