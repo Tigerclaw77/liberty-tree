@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import readline from "node:readline/promises";
 import { stdin as defaultInput, stdout as defaultOutput } from "node:process";
+import { buildEvidenceReliabilityModel } from "../evidence-reliability/evidence-reliability-engine.mjs";
 import { buildPacketModel } from "../packet/packet-assembler.mjs";
 import { getCategory } from "../workbench/core/categories.mjs";
 
@@ -232,9 +233,19 @@ function flagMissingPfasDeclarations({ documents, items, traceByKey, query }) {
   });
 }
 
-function flagLowConfidenceDocuments({ documents, items, traceByKey, threshold }) {
+function reliabilityRecordFor(document, reliabilityByKey) {
+  return reliabilityByKey?.get(documentKey(document)) || null;
+}
+
+function isReliablyReady(document, reliabilityByKey) {
+  const record = reliabilityRecordFor(document, reliabilityByKey);
+  return Boolean(record?.ready_for_reliance);
+}
+
+function flagLowConfidenceDocuments({ documents, items, traceByKey, threshold, reliabilityByKey }) {
   for (const document of documents) {
     if (isMissing(document) || isDuplicate(document)) continue;
+    if (isReliablyReady(document, reliabilityByKey)) continue;
     const documentCategory = category(document);
     const score = Number(document.confidence_score || 0);
     const lowConfidence = score > 0 ? score < threshold : ["Low", "Unknown"].includes(confidence(document));
@@ -270,10 +281,11 @@ function flagExpertRequestedDocuments({ documents, items, traceByKey }) {
   }
 }
 
-function flagUnknownAuthority({ documents, items, traceByKey }) {
+function flagUnknownAuthority({ documents, items, traceByKey, reliabilityByKey }) {
   for (const document of documents) {
     const documentCategory = category(document);
     if (isMissing(document) || isDuplicate(document) || !DECLARATION_CATEGORIES.has(documentCategory)) continue;
+    if (reliabilityByKey) continue;
     if (authorityKnown(document)) continue;
 
     addItem(items, {
@@ -290,7 +302,8 @@ function flagUnknownAuthority({ documents, items, traceByKey }) {
   }
 }
 
-function flagConflictingRevisions({ documents, items, traceByKey }) {
+function flagConflictingRevisions({ documents, items, traceByKey, reliabilityByKey }) {
+  if (reliabilityByKey) return;
   const groups = groupBy(
     documents.filter((document) => !isMissing(document) && !isDuplicate(document)),
     (document) => document.timeline_group || `${category(document)}:${normalizedTitle(document)}`,
@@ -315,7 +328,8 @@ function flagConflictingRevisions({ documents, items, traceByKey }) {
   }
 }
 
-function flagPossibleDuplicates({ documents, items, traceByKey }) {
+function flagPossibleDuplicates({ documents, items, traceByKey, reliabilityByKey }) {
+  if (reliabilityByKey) return;
   const groups = groupBy(
     documents.filter((document) => !isMissing(document) && !isDuplicate(document)),
     (document) => `${category(document)}:${normalizedTitle(document)}`,
@@ -339,7 +353,8 @@ function flagPossibleDuplicates({ documents, items, traceByKey }) {
   }
 }
 
-function flagConflictingDeclarations({ documents, items, traceByKey }) {
+function flagConflictingDeclarations({ documents, items, traceByKey, reliabilityByKey }) {
+  if (reliabilityByKey) return;
   const groups = groupBy(
     documents.filter((document) => !isMissing(document) && !isDuplicate(document) && DECLARATION_CATEGORIES.has(category(document))),
     (document) => category(document),
@@ -426,6 +441,30 @@ function flagUnsupportedPacketStatements({ packetModel, items }) {
   }
 }
 
+function flagEvidenceReliabilityExceptions({ reliabilityModel, items }) {
+  for (const exception of reliabilityModel.exceptions) {
+    addItem(items, {
+      key: `evidence-reliability:${exception.document_key}:${exception.issue_types.join("-")}`,
+      issue_type: "EVIDENCE_RELIABILITY_EXCEPTION",
+      severity: exception.severity,
+      issue: `${exception.title}: ${exception.issue}`,
+      supporting_evidence: exception.supporting_evidence.map((evidence) => ({
+        source_id: "REL-SCORE",
+        document_id: exception.exception_id,
+        title: exception.title,
+        url: evidence.url || UNKNOWN,
+        document_type: exception.category,
+        confidence: String(exception.reliability_score),
+        basis: `Reliability score ${exception.reliability_score}; dimensions ${JSON.stringify(evidence.dimensions)}`,
+      })),
+      confidence: String(exception.reliability_score),
+      why_flagged: exception.why_flagged,
+      recommended_action: exception.recommended_action,
+      related_document_keys: [exception.document_key],
+    });
+  }
+}
+
 function applyReviewState(items, session) {
   const store = session?.expert_reviews || {};
   return items.map((item, index) => {
@@ -493,6 +532,8 @@ export function buildExpertReviewModel({ documents, summary, query, session = {}
   const normalizedQuery = normalizeQuery(query);
   const active = activeDocuments(documents);
   const traceByKey = buildTraceMap(active);
+  const reliabilityModel = buildEvidenceReliabilityModel({ documents: active, query: normalizedQuery, generatedAt });
+  const reliabilityByKey = new Map(reliabilityModel.documents.map((document) => [document.document_key, document]));
   const packetModel = buildPacketModel({
     documents: active,
     summary,
@@ -502,12 +543,13 @@ export function buildExpertReviewModel({ documents, summary, query, session = {}
   const items = [];
 
   flagMissingPfasDeclarations({ documents: active, items, traceByKey, query: normalizedQuery });
-  flagLowConfidenceDocuments({ documents: active, items, traceByKey, threshold: confidenceThreshold });
+  flagEvidenceReliabilityExceptions({ reliabilityModel, items });
+  flagLowConfidenceDocuments({ documents: active, items, traceByKey, threshold: confidenceThreshold, reliabilityByKey });
   flagExpertRequestedDocuments({ documents: active, items, traceByKey });
-  flagUnknownAuthority({ documents: active, items, traceByKey });
-  flagConflictingRevisions({ documents: active, items, traceByKey });
-  flagPossibleDuplicates({ documents: active, items, traceByKey });
-  flagConflictingDeclarations({ documents: active, items, traceByKey });
+  flagUnknownAuthority({ documents: active, items, traceByKey, reliabilityByKey });
+  flagConflictingRevisions({ documents: active, items, traceByKey, reliabilityByKey });
+  flagPossibleDuplicates({ documents: active, items, traceByKey, reliabilityByKey });
+  flagConflictingDeclarations({ documents: active, items, traceByKey, reliabilityByKey });
   flagUnsupportedPacketStatements({ packetModel, items });
 
   const deduped = new Map();
@@ -530,6 +572,12 @@ export function buildExpertReviewModel({ documents, summary, query, session = {}
     open_exception_items: openItems.length,
     resolved_or_decided_items: itemsWithState.length - openItems.length,
     metrics,
+    reliability: {
+      threshold: reliabilityModel.threshold,
+      document_count: reliabilityModel.document_count,
+      exception_count: reliabilityModel.exception_count,
+      false_positive_reduction_percent: reliabilityModel.metrics.false_positive_reduction_percent,
+    },
     items: itemsWithState,
     openItems,
   };

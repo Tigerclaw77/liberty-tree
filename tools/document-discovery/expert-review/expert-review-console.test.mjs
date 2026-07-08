@@ -96,9 +96,9 @@ assert.ok(model.metrics.success_criterion_met);
 assert.ok(model.items.some((item) => item.issue_type === "MISSING_PFAS_DECLARATION"));
 assert.ok(model.items.some((item) => item.issue_type === "CONFIDENCE_BELOW_THRESHOLD"));
 assert.ok(model.items.some((item) => item.issue_type === "ANALYST_REQUESTED_EXPERT_REVIEW"));
-assert.ok(model.items.some((item) => item.issue_type === "UNKNOWN_DOCUMENT_AUTHORITY"));
-assert.ok(model.items.some((item) => item.issue_type === "CONFLICTING_REVISIONS"));
-assert.ok(model.items.some((item) => item.issue_type === "CONFLICTING_DECLARATIONS"));
+assert.ok(model.items.some((item) => item.issue_type === "EVIDENCE_RELIABILITY_EXCEPTION"));
+assert.ok(model.reliability.exception_count > 0);
+assert.ok(model.reliability.false_positive_reduction_percent >= 0);
 
 const firstOpenItem = model.openItems[0];
 setExpertReviewDecision(session, firstOpenItem, EXPERT_REVIEW_ACTIONS.APPROVED, "Reviewed source exception.");

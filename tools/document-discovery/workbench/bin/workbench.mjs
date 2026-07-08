@@ -23,6 +23,7 @@ import { writePacketExports } from "../../packet/packet-assembler.mjs";
 import { buildExpertReviewModel, formatExpertReviewSummary, runExpertReviewConsole } from "../../expert-review/expert-review-console.mjs";
 import { buildSupplierRequestModel, formatSupplierRequestSummary, writeSupplierRequestExports } from "../../supplier-requests/supplier-request-generator.mjs";
 import { formatResponseTrackerSummary, runResponseTrackerConsole, writeResponseTrackerExports } from "../../response-tracker/response-tracker.mjs";
+import { formatEvidenceReliabilitySummary, writeEvidenceReliabilityExports } from "../../evidence-reliability/evidence-reliability-engine.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKBENCH_ROOT = path.resolve(__dirname, "..");
@@ -64,6 +65,8 @@ function parseArgs(argv) {
       args.supplierRequests = true;
     } else if (arg === "--track-responses") {
       args.trackResponses = true;
+    } else if (arg === "--score-evidence" || arg === "--evidence-reliability") {
+      args.scoreEvidence = true;
     } else if (arg === "--no-interactive" || arg === "--export-only") {
       args.interactive = false;
     } else if (arg === "--no-cache") {
@@ -95,6 +98,7 @@ Options:
                    Generate targeted supplier/customer/manufacturer requests
   --track-responses
                    Open the external response tracker after request generation
+  --score-evidence Score evidence reliability and export exceptions
   --export-only     Run, summarize, export, and exit
   --no-interactive  Same as --export-only
   --no-cache        Disable fetch cache
@@ -117,6 +121,8 @@ Interactive commands:
   supplier-requests  Generate Supplier Requests
   t                  Track External Responses
   track-responses    Track External Responses
+  quality            Score Evidence Reliability
+  reliability        Score Evidence Reliability
   q                  Save and quit
 `);
 }
@@ -209,6 +215,13 @@ function printResponseTracker(exports) {
   console.log(`Response tracker CSV:  ${exports.csvPath}`);
   console.log(`Follow-up emails:      ${exports.followUpEmailsPath}`);
   console.log(`Gap status summary:    ${exports.gapStatusSummaryPath}`);
+}
+
+function printEvidenceReliability(exports) {
+  console.log(formatEvidenceReliabilitySummary(exports));
+  console.log(`Reliability JSON:       ${exports.jsonPath}`);
+  console.log(`Reliability CSV:        ${exports.csvPath}`);
+  console.log(`Reliability exceptions: ${exports.exceptionsPath}`);
 }
 
 async function buildResponseTrackerInputs({ documents, summary, query, session, exportDir }) {
@@ -335,6 +348,13 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         continue;
       }
 
+      if (command === "quality" || command === "reliability" || command === "score-evidence") {
+        documents = prepareDocuments(sourceDocuments, session);
+        const reliabilityExports = await writeEvidenceReliabilityExports({ documents, query, exportDir });
+        printEvidenceReliability(reliabilityExports);
+        continue;
+      }
+
       if (command === "missing") {
         const category = id || "Other";
         addManualMissingDocument(session, { category, note });
@@ -367,7 +387,7 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         await saveSession(sessionPath, session);
         console.log(`Marked ${id} as ${actionByCommand[command]}.`);
       } else {
-        console.log("Unknown command. Use v/d/i/e/m/c/summary/g/x/p/r/s/t/q.");
+        console.log("Unknown command. Use v/d/i/e/m/c/summary/g/x/p/r/s/t/quality/q.");
       }
 
       documents = prepareDocuments(sourceDocuments, session);
@@ -456,8 +476,12 @@ async function main() {
       printResponseTracker(trackerExports);
     }
   }
+  if (args.scoreEvidence) {
+    const reliabilityExports = await writeEvidenceReliabilityExports({ documents, query, exportDir });
+    printEvidenceReliability(reliabilityExports);
+  }
 
-  if (args.interactive && !args.expertReview && !args.supplierRequests && !args.trackResponses) {
+  if (args.interactive && !args.expertReview && !args.supplierRequests && !args.trackResponses && !args.scoreEvidence) {
     await handleInteractive({ sourceDocuments: result.documents, documents, session, sessionPath, exportDir, query });
   } else {
     await saveSession(sessionPath, session);
