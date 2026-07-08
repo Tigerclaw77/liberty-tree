@@ -207,9 +207,9 @@ export function IntakeFlow() {
           ))}
         </ol>
         <p className="mt-6 text-xs leading-6 text-muted">
-          V1 records intake metadata and selected file names for a temporary
-          portal. Liberty Tree will confirm secure transfer before production
-          review begins.
+          This intake records the scope and selected file names, then creates a
+          temporary portal. Liberty Tree will confirm secure transfer before
+          document review begins.
         </p>
       </aside>
 

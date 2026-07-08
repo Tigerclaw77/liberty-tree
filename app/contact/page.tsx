@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ButtonLink } from "@/components/ButtonLink";
 
 export const metadata: Metadata = {
   title: "PFAS Documentation Request Contact",
@@ -11,9 +12,9 @@ export const metadata: Metadata = {
 
 const includeItems = [
   "Products, product families, or divisions involved",
-  "The request source, such as customer, auditor, counsel, or internal review",
-  "Relevant deadlines or response windows",
-  "Known document types already available",
+  "The customer request, questionnaire, or deadline",
+  "Approximate number of SKUs and suppliers",
+  "Known SDS, TDS, declaration, or source-document gaps",
   "Any supplier evidence collection already in progress",
 ];
 
@@ -23,98 +24,47 @@ export default function ContactPage() {
       <section className="page-hero">
         <div className="site-shell">
           <p className="eyebrow">Contact</p>
-          <h1>Talk through a PFAS documentation request.</h1>
+          <h1>Need to answer a PFAS documentation request?</h1>
           <p>
-            Share the products, customer request, deadline, and document types
-            already available. Liberty Tree will respond with the likely packet
-            scope and next intake step.
+            The fastest path is the engagement intake. It captures the scope,
+            deadline, products, suppliers, and available documents so Liberty
+            Tree can review the request and confirm next steps.
           </p>
         </div>
       </section>
 
       <section className="section-band">
         <div className="site-shell grid gap-12 lg:grid-cols-[1fr_0.85fr]">
-          <form className="contact-form">
-            <div className="grid gap-2">
-              <label className="text-sm font-semibold text-navy" htmlFor="name">
-                Name
-              </label>
-              <input
-                className="field-control"
-                id="name"
-                name="name"
-                type="text"
-                autoComplete="name"
-              />
+          <div className="contact-form">
+            <div>
+              <h2 className="font-serif text-3xl font-normal text-navy">
+                Start with intake, not a sales call.
+              </h2>
+              <p className="mt-4 text-base leading-8 text-muted">
+                Submit the customer request, product scope, deadline, and file
+                types you already have. The intake creates a temporary case
+                portal and gives Liberty Tree the information needed to scope a
+                fixed-price evidence engagement.
+              </p>
             </div>
-            <div className="grid gap-2">
-              <label
-                className="text-sm font-semibold text-navy"
-                htmlFor="company"
-              >
-                Company
-              </label>
-              <input
-                className="field-control"
-                id="company"
-                name="company"
-                type="text"
-                autoComplete="organization"
-              />
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href="/start-pfas-engagement">
+                Start a PFAS Evidence Engagement
+              </ButtonLink>
+              <ButtonLink href="/pfas-evidence-packets" variant="secondary">
+                View Packet Deliverables
+              </ButtonLink>
             </div>
-            <div className="grid gap-2">
-              <label className="text-sm font-semibold text-navy" htmlFor="email">
-                Email
-              </label>
-              <input
-                className="field-control"
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-              />
-            </div>
-            <div className="grid gap-2">
-              <label className="text-sm font-semibold text-navy" htmlFor="area">
-                Area of concern
-              </label>
-              <select
-                className="field-control"
-                id="area"
-                name="area"
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Select an area
-                </option>
-                <option value="pfas">PFAS documentation</option>
-                <option value="supplier">Supplier evidence collection</option>
-                <option value="customer">Customer documentation request</option>
-                <option value="internal">Internal evidence review</option>
-                <option value="other">Other compliance evidence matter</option>
-              </select>
-            </div>
-            <div className="grid gap-2">
-              <label
-                className="text-sm font-semibold text-navy"
-                htmlFor="message"
-              >
-                Message
-              </label>
-              <textarea
-                className="field-control min-h-40 resize-y"
-                id="message"
-                name="message"
-              />
-            </div>
-            <button className="button-primary justify-self-start" type="button">
-              Request Consultation
-            </button>
-          </form>
+            <p className="text-xs leading-6 text-muted">
+              Liberty Tree organizes, validates, and documents evidence. We do
+              not perform laboratory testing, certify compliance, or provide
+              legal opinions.
+            </p>
+          </div>
 
           <aside className="quiet-card self-start">
             <h2 className="font-serif text-3xl font-normal text-navy">
-              What to include
+              What to have ready
             </h2>
             <ul className="mt-5 grid gap-3">
               {includeItems.map((item) => (
@@ -122,9 +72,8 @@ export default function ContactPage() {
               ))}
             </ul>
             <p className="mt-6 text-xs leading-6 text-muted">
-              Please avoid sending highly sensitive documents through an
-              unconfirmed intake path. A secure document process can be
-              established after initial scoping.
+              If sensitive files are involved, Liberty Tree will confirm the
+              secure transfer process before relying on those documents.
             </p>
           </aside>
         </div>

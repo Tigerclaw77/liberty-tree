@@ -105,16 +105,18 @@ export default function Home() {
     <>
       <section className="site-shell home-hero grid gap-12 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div>
-          <p className="eyebrow">PFAS evidence packages for manufacturers</p>
-          <h1 className="mt-5 max-w-3xl font-serif text-5xl font-normal leading-tight text-navy sm:text-6xl">
+          <p className="eyebrow">
+            PFAS evidence packages for manufacturers. From $7,500.
+          </p>
+          <h1 className="mt-5 max-w-3xl font-serif text-4xl font-normal leading-tight text-navy sm:text-6xl">
             Turn scattered PFAS documentation into an organized evidence
             package.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted">
-            When a customer asks for PFAS documentation, Liberty Tree organizes
-            the records you already have, finds additional public evidence,
-            identifies missing documents, prepares supplier requests, and
-            delivers a source-indexed package your team can review and use.
+            Upload the customer request, product list, SDS/TDS, declarations,
+            and supplier records you already have. Liberty Tree organizes the
+            evidence, finds public sources, identifies gaps, prepares supplier
+            requests, and delivers a human-reviewed, source-indexed package.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/start-pfas-engagement">
@@ -214,7 +216,8 @@ export default function Home() {
           >
             Final scope depends primarily on documentation complexity: number of
             SKUs, supplier count, document quality, missing evidence, and
-            customer deadline pressure. Company size is not the main driver.
+            customer deadline pressure. Company size is not the main driver, and
+            intake can begin before final scope is confirmed.
           </SectionHeading>
           <div className="quiet-card">
             <h3>What drives scope</h3>

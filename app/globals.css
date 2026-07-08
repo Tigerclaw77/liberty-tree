@@ -121,6 +121,10 @@ textarea {
     border-color: var(--line);
   }
 
+  .mobile-nav:not([open]) nav {
+    @apply hidden;
+  }
+
   .mobile-nav a {
     @apply px-3 py-3 text-sm font-medium text-slate;
   }

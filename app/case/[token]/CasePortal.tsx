@@ -91,8 +91,9 @@ export function CasePortal({ token }: CasePortalProps) {
           <p className="eyebrow">Case portal</p>
           <h1>{caseSnapshot.caseId}</h1>
           <p>
-            Secure token workspace for the PFAS evidence engagement. No
-            production engine output is connected to this v1 portal.
+            Temporary workspace for engagement status, document tracking,
+            outstanding requests, downloads, and messages. No customer account
+            required.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button className="button-primary" type="button" onClick={copyPortalLink}>
