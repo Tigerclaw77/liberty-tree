@@ -20,6 +20,7 @@ import { buildSummary } from "../core/summary.mjs";
 import { exportEvidenceIndex } from "../core/workbench-export.mjs";
 import { writePacketExports } from "../../packet/packet-assembler.mjs";
 import { buildExpertReviewModel, formatExpertReviewSummary, runExpertReviewConsole } from "../../expert-review/expert-review-console.mjs";
+import { formatSupplierRequestSummary, writeSupplierRequestExports } from "../../supplier-requests/supplier-request-generator.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKBENCH_ROOT = path.resolve(__dirname, "..");
@@ -57,6 +58,8 @@ function parseArgs(argv) {
       args.generatePacket = true;
     } else if (arg === "--expert-review") {
       args.expertReview = true;
+    } else if (arg === "--supplier-requests") {
+      args.supplierRequests = true;
     } else if (arg === "--no-interactive" || arg === "--export-only") {
       args.interactive = false;
     } else if (arg === "--no-cache") {
@@ -84,6 +87,8 @@ Options:
   --export-dir      Evidence index export directory
   --generate-packet Also generate draft packet Markdown, HTML, and print HTML
   --expert-review   Open the expert exception console after discovery
+  --supplier-requests
+                   Generate targeted supplier/customer/manufacturer requests
   --export-only     Run, summarize, export, and exit
   --no-interactive  Same as --export-only
   --no-cache        Disable fetch cache
@@ -97,11 +102,13 @@ Interactive commands:
   missing <type> [note]
                     Add a missing-document gap
   c <id>             Clear analyst action
-  s                  Show summary
+  summary            Show summary
   g                  Show grouped results
   x                  Export evidence-index files
   p                  Generate Packet
   r                  Expert Review Console
+  s                  Generate Supplier Requests
+  supplier-requests  Generate Supplier Requests
   q                  Save and quit
 `);
 }
@@ -181,6 +188,13 @@ function printExpertReview(model) {
   console.log(formatExpertReviewSummary(model));
 }
 
+function printSupplierRequests(exports) {
+  console.log(formatSupplierRequestSummary(exports));
+  console.log(`Supplier requests CSV:  ${exports.csvPath}`);
+  console.log(`Supplier requests JSON: ${exports.jsonPath}`);
+  console.log(`Email drafts:           ${exports.emailDraftsPath}`);
+}
+
 function findDocument(documents, id) {
   const parsed = Number.parseInt(id, 10);
   if (!Number.isInteger(parsed)) return null;
@@ -227,7 +241,7 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         break;
       }
 
-      if (command === "s") {
+      if (command === "summary" || command === "sum") {
         documents = prepareDocuments(sourceDocuments, session);
         printSummary(buildSummary(documents));
         continue;
@@ -269,6 +283,14 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         continue;
       }
 
+      if (command === "s" || command === "supplier-requests") {
+        documents = prepareDocuments(sourceDocuments, session);
+        const summary = buildSummary(documents);
+        const requestExports = await writeSupplierRequestExports({ documents, summary, query, session, exportDir });
+        printSupplierRequests(requestExports);
+        continue;
+      }
+
       if (command === "missing") {
         const category = id || "Other";
         addManualMissingDocument(session, { category, note });
@@ -301,7 +323,7 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         await saveSession(sessionPath, session);
         console.log(`Marked ${id} as ${actionByCommand[command]}.`);
       } else {
-        console.log("Unknown command. Use v/d/i/e/m/c/s/g/x/p/r/q.");
+        console.log("Unknown command. Use v/d/i/e/m/c/summary/g/x/p/r/s/q.");
       }
 
       documents = prepareDocuments(sourceDocuments, session);
@@ -366,8 +388,12 @@ async function main() {
       printExpertReview(buildExpertReviewModel({ documents, summary, query, session }));
     }
   }
+  if (args.supplierRequests) {
+    const requestExports = await writeSupplierRequestExports({ documents, summary, query, session, exportDir });
+    printSupplierRequests(requestExports);
+  }
 
-  if (args.interactive && !args.expertReview) {
+  if (args.interactive && !args.expertReview && !args.supplierRequests) {
     await handleInteractive({ sourceDocuments: result.documents, documents, session, sessionPath, exportDir, query });
   } else {
     await saveSession(sessionPath, session);
