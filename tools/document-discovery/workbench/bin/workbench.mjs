@@ -19,6 +19,7 @@ import { assignTimeline } from "../core/timeline.mjs";
 import { buildSummary } from "../core/summary.mjs";
 import { exportEvidenceIndex } from "../core/workbench-export.mjs";
 import { writePacketExports } from "../../packet/packet-assembler.mjs";
+import { buildExpertReviewModel, formatExpertReviewSummary, runExpertReviewConsole } from "../../expert-review/expert-review-console.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKBENCH_ROOT = path.resolve(__dirname, "..");
@@ -54,6 +55,8 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === "--generate-packet") {
       args.generatePacket = true;
+    } else if (arg === "--expert-review") {
+      args.expertReview = true;
     } else if (arg === "--no-interactive" || arg === "--export-only") {
       args.interactive = false;
     } else if (arg === "--no-cache") {
@@ -80,6 +83,7 @@ Options:
   --session-dir     Local session decision directory
   --export-dir      Evidence index export directory
   --generate-packet Also generate draft packet Markdown, HTML, and print HTML
+  --expert-review   Open the expert exception console after discovery
   --export-only     Run, summarize, export, and exit
   --no-interactive  Same as --export-only
   --no-cache        Disable fetch cache
@@ -97,6 +101,7 @@ Interactive commands:
   g                  Show grouped results
   x                  Export evidence-index files
   p                  Generate Packet
+  r                  Expert Review Console
   q                  Save and quit
 `);
 }
@@ -170,6 +175,10 @@ function printPacketExports(exports) {
   console.log(`Packet HTML:     ${exports.htmlPath}`);
   console.log(`PDF-ready HTML:  ${exports.printHtmlPath}`);
   console.log(`Assembly time:   ${(exports.metrics.previous_analyst_assembly_minutes / 60).toFixed(1)}h -> ${(exports.metrics.new_analyst_assembly_minutes / 60).toFixed(1)}h (${exports.metrics.assembly_reduction_percent.toFixed(1)}% reduction)`);
+}
+
+function printExpertReview(model) {
+  console.log(formatExpertReviewSummary(model));
 }
 
 function findDocument(documents, id) {
@@ -247,6 +256,19 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         continue;
       }
 
+      if (command === "r" || command === "review" || command === "expert") {
+        documents = prepareDocuments(sourceDocuments, session);
+        const summary = buildSummary(documents);
+        await runExpertReviewConsole({
+          documents,
+          summary,
+          query,
+          session,
+          save: () => saveSession(sessionPath, session),
+        });
+        continue;
+      }
+
       if (command === "missing") {
         const category = id || "Other";
         addManualMissingDocument(session, { category, note });
@@ -279,7 +301,7 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         await saveSession(sessionPath, session);
         console.log(`Marked ${id} as ${actionByCommand[command]}.`);
       } else {
-        console.log("Unknown command. Use v/d/i/e/m/c/s/g/x/p/q.");
+        console.log("Unknown command. Use v/d/i/e/m/c/s/g/x/p/r/q.");
       }
 
       documents = prepareDocuments(sourceDocuments, session);
@@ -336,8 +358,16 @@ async function main() {
     const packetExports = await writePacketExports({ documents, summary, query, exportDir });
     printPacketExports(packetExports);
   }
+  if (args.expertReview) {
+    const save = () => saveSession(sessionPath, session);
+    if (args.interactive) {
+      await runExpertReviewConsole({ documents, summary, query, session, save });
+    } else {
+      printExpertReview(buildExpertReviewModel({ documents, summary, query, session }));
+    }
+  }
 
-  if (args.interactive) {
+  if (args.interactive && !args.expertReview) {
     await handleInteractive({ sourceDocuments: result.documents, documents, session, sessionPath, exportDir, query });
   } else {
     await saveSession(sessionPath, session);
