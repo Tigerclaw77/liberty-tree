@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import path from "node:path";
 import readline from "node:readline/promises";
+import { readFile } from "node:fs/promises";
 import { stdin as input, stdout as output } from "node:process";
 import { fileURLToPath } from "node:url";
 import { discoverDocuments } from "../../crawler/discovery-engine.mjs";
@@ -20,7 +21,8 @@ import { buildSummary } from "../core/summary.mjs";
 import { exportEvidenceIndex } from "../core/workbench-export.mjs";
 import { writePacketExports } from "../../packet/packet-assembler.mjs";
 import { buildExpertReviewModel, formatExpertReviewSummary, runExpertReviewConsole } from "../../expert-review/expert-review-console.mjs";
-import { formatSupplierRequestSummary, writeSupplierRequestExports } from "../../supplier-requests/supplier-request-generator.mjs";
+import { buildSupplierRequestModel, formatSupplierRequestSummary, writeSupplierRequestExports } from "../../supplier-requests/supplier-request-generator.mjs";
+import { formatResponseTrackerSummary, runResponseTrackerConsole, writeResponseTrackerExports } from "../../response-tracker/response-tracker.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKBENCH_ROOT = path.resolve(__dirname, "..");
@@ -60,6 +62,8 @@ function parseArgs(argv) {
       args.expertReview = true;
     } else if (arg === "--supplier-requests") {
       args.supplierRequests = true;
+    } else if (arg === "--track-responses") {
+      args.trackResponses = true;
     } else if (arg === "--no-interactive" || arg === "--export-only") {
       args.interactive = false;
     } else if (arg === "--no-cache") {
@@ -89,6 +93,8 @@ Options:
   --expert-review   Open the expert exception console after discovery
   --supplier-requests
                    Generate targeted supplier/customer/manufacturer requests
+  --track-responses
+                   Open the external response tracker after request generation
   --export-only     Run, summarize, export, and exit
   --no-interactive  Same as --export-only
   --no-cache        Disable fetch cache
@@ -109,6 +115,8 @@ Interactive commands:
   r                  Expert Review Console
   s                  Generate Supplier Requests
   supplier-requests  Generate Supplier Requests
+  t                  Track External Responses
+  track-responses    Track External Responses
   q                  Save and quit
 `);
 }
@@ -193,6 +201,28 @@ function printSupplierRequests(exports) {
   console.log(`Supplier requests CSV:  ${exports.csvPath}`);
   console.log(`Supplier requests JSON: ${exports.jsonPath}`);
   console.log(`Email drafts:           ${exports.emailDraftsPath}`);
+}
+
+function printResponseTracker(exports) {
+  console.log(formatResponseTrackerSummary(exports));
+  console.log(`Response tracker JSON: ${exports.jsonPath}`);
+  console.log(`Response tracker CSV:  ${exports.csvPath}`);
+  console.log(`Follow-up emails:      ${exports.followUpEmailsPath}`);
+  console.log(`Gap status summary:    ${exports.gapStatusSummaryPath}`);
+}
+
+async function buildResponseTrackerInputs({ documents, summary, query, session, exportDir }) {
+  const supplierRequests = buildSupplierRequestModel({ documents, summary, query, session });
+  const requestExports = await writeSupplierRequestExports({ documents, summary, query, session, exportDir });
+  const emailDraftsText = await readFile(requestExports.emailDraftsPath, "utf8");
+  const expertReviewModel = buildExpertReviewModel({ documents, summary, query, session });
+  const missingDocumentationRegister = supplierRequests.requests.flatMap((request) => request.originating_gaps || []);
+  return {
+    supplierRequests,
+    emailDraftsText,
+    expertReviewModel,
+    missingDocumentationRegister,
+  };
 }
 
 function findDocument(documents, id) {
@@ -291,6 +321,20 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         continue;
       }
 
+      if (command === "t" || command === "track-responses") {
+        documents = prepareDocuments(sourceDocuments, session);
+        const summary = buildSummary(documents);
+        const trackerInputs = await buildResponseTrackerInputs({ documents, summary, query, session, exportDir });
+        await runResponseTrackerConsole({
+          ...trackerInputs,
+          query,
+          session,
+          exportDir,
+          save: () => saveSession(sessionPath, session),
+        });
+        continue;
+      }
+
       if (command === "missing") {
         const category = id || "Other";
         addManualMissingDocument(session, { category, note });
@@ -323,7 +367,7 @@ async function handleInteractive({ sourceDocuments, documents, session, sessionP
         await saveSession(sessionPath, session);
         console.log(`Marked ${id} as ${actionByCommand[command]}.`);
       } else {
-        console.log("Unknown command. Use v/d/i/e/m/c/summary/g/x/p/r/s/q.");
+        console.log("Unknown command. Use v/d/i/e/m/c/summary/g/x/p/r/s/t/q.");
       }
 
       documents = prepareDocuments(sourceDocuments, session);
@@ -392,8 +436,28 @@ async function main() {
     const requestExports = await writeSupplierRequestExports({ documents, summary, query, session, exportDir });
     printSupplierRequests(requestExports);
   }
+  if (args.trackResponses) {
+    const trackerInputs = await buildResponseTrackerInputs({ documents, summary, query, session, exportDir });
+    if (args.interactive) {
+      await runResponseTrackerConsole({
+        ...trackerInputs,
+        query,
+        session,
+        exportDir,
+        save: () => saveSession(sessionPath, session),
+      });
+    } else {
+      const trackerExports = await writeResponseTrackerExports({
+        ...trackerInputs,
+        query,
+        session,
+        exportDir,
+      });
+      printResponseTracker(trackerExports);
+    }
+  }
 
-  if (args.interactive && !args.expertReview && !args.supplierRequests) {
+  if (args.interactive && !args.expertReview && !args.supplierRequests && !args.trackResponses) {
     await handleInteractive({ sourceDocuments: result.documents, documents, session, sessionPath, exportDir, query });
   } else {
     await saveSession(sessionPath, session);
